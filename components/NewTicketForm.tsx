@@ -22,12 +22,7 @@ export default function NewTicketForm() {
       router.push('/');
       router.refresh();
     } catch (err: any) {
-      if (err.message && err.message.includes('fetch failed')) {
-         console.warn("Database not connected. Faking creation for demo.");
-         router.push('/');
-      } else {
-         setError(err.message || 'Failed to create ticket');
-      }
+      setError(err.message || 'Failed to create ticket');
     } finally {
       setIsSubmitting(false);
     }

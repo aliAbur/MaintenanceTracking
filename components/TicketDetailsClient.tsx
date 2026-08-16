@@ -24,8 +24,8 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
       await updateTicketStatus(ticket.id, newStatus, ticket.status);
       router.refresh(); 
     } catch (error) {
-      console.warn("Update failed (mock fallback):", error);
-      alert("Status updated (Simulated. DB disconnected).");
+      console.error("Update failed:", error);
+      alert("Failed to update status. Please try again.");
     } finally {
       setIsUpdating(false);
     }

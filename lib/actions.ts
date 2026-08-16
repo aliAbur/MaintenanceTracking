@@ -3,6 +3,20 @@
 import { prisma } from './prisma';
 import { TicketStatus, TicketPriority } from '@prisma/client';
 
+async function getOrCreateSystemUser() {
+  let user = await prisma.userProfile.findUnique({ where: { email: 'system@panelservice.app' } });
+  if (!user) {
+    user = await prisma.userProfile.create({
+      data: {
+        email: 'system@panelservice.app',
+        fullName: 'System Operator',
+        role: 'Admin'
+      }
+    });
+  }
+  return user.id;
+}
+
 export async function getTickets(showClosed: boolean = false) {
   const tickets = await prisma.ticket.findMany({
     where: showClosed ? undefined : {
@@ -14,7 +28,7 @@ export async function getTickets(showClosed: boolean = false) {
       assignee: true
     },
     orderBy: {
-      customerName: 'asc'
+      createdAt: 'desc'
     }
   });
   
@@ -54,15 +68,13 @@ export async function createTicket(formData: FormData) {
   const specialNotes = formData.get('specialNotes') as string;
   const assignedTo = formData.get('assignedTo') as string;
 
-  // In a real application, you'd get this from the session
-  const mockUserId = '11111111-1111-1111-1111-111111111111';
+  const systemUserId = await getOrCreateSystemUser();
 
-  // Use a transaction to ensure both ticket and log are created together
   const ticket = await prisma.$transaction(async (tx) => {
     const newTicket = await tx.ticket.create({
       data: {
         customerName,
-        customerPhone,
+        customerPhone: customerPhone || null,
         panelType,
         priority,
         specialNotes: specialNotes || null,
@@ -74,7 +86,7 @@ export async function createTicket(formData: FormData) {
     await tx.auditLog.create({
       data: {
         ticketId: newTicket.id,
-        modifiedBy: mockUserId,
+        modifiedBy: systemUserId,
         action: 'Ticket Created',
         oldValue: null,
         newValue: 'Open'
@@ -88,7 +100,7 @@ export async function createTicket(formData: FormData) {
 }
 
 export async function updateTicketStatus(ticketId: string, newStatus: TicketStatus, oldStatus: TicketStatus) {
-  const mockUserId = '11111111-1111-1111-1111-111111111111';
+  const systemUserId = await getOrCreateSystemUser();
 
   await prisma.$transaction(async (tx) => {
     await tx.ticket.update({
@@ -99,7 +111,7 @@ export async function updateTicketStatus(ticketId: string, newStatus: TicketStat
     await tx.auditLog.create({
       data: {
         ticketId,
-        modifiedBy: mockUserId,
+        modifiedBy: systemUserId,
         action: 'Status changed',
         oldValue: oldStatus,
         newValue: newStatus
