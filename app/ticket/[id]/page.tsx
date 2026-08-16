@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export default async function TicketPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   let ticket = MOCK_TICKETS.find(t => t.id === resolvedParams.id);
-  let auditLogs = MOCK_LOGS.filter(l => l.ticket_id === resolvedParams.id);
+  let auditLogs = MOCK_LOGS.filter(l => l.ticketId === resolvedParams.id);
 
   try {
     const dbTicket = await getTicketById(resolvedParams.id);
