@@ -1,0 +1,328 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PanelService Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface-variant": "#434655",
+                      "on-primary-fixed": "#00174b",
+                      "surface-tint": "#0053db",
+                      "on-error": "#ffffff",
+                      "outline-variant": "#c3c6d7",
+                      "surface-dim": "#d9dadb",
+                      "background": "#f8f9fa",
+                      "on-secondary-fixed-variant": "#38485d",
+                      "on-secondary-fixed": "#0b1c30",
+                      "on-tertiary": "#ffffff",
+                      "inverse-primary": "#b4c5ff",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "on-primary-container": "#eeefff",
+                      "secondary": "#505f76",
+                      "primary-fixed": "#dbe1ff",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "outline": "#737686",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#943700",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "tertiary-container": "#bc4800",
+                      "primary-container": "#2563eb",
+                      "surface-container": "#edeeef",
+                      "surface-container-low": "#f3f4f5",
+                      "on-surface": "#191c1d",
+                      "primary": "#004ac6",
+                      "tertiary-fixed": "#ffdbcd",
+                      "on-background": "#191c1d",
+                      "on-tertiary-container": "#ffede6",
+                      "on-secondary-container": "#54647a",
+                      "on-tertiary-fixed": "#360f00",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed": "#d3e4fe",
+                      "surface-bright": "#f8f9fa",
+                      "inverse-surface": "#2e3132",
+                      "error-container": "#ffdad6",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "surface": "#f8f9fa",
+                      "secondary-fixed-dim": "#b7c8e1",
+                      "inverse-on-surface": "#f0f1f2",
+                      "secondary-container": "#d0e1fb",
+                      "surface-container-high": "#e7e8e9",
+                      "surface-variant": "#e1e3e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "base": "4px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "gutter": "20px",
+                      "container-max": "1280px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "code": [
+                              "JetBrains Mono"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "h2": [
+                              "Inter"
+                      ],
+                      "h1": [
+                              "Inter"
+                      ],
+                      "h1-mobile": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "code": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h2": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h1": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "h1-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "34px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen flex flex-col antialiased">
+<!-- TopNavBar -->
+<header class="bg-surface text-primary font-body-md docked full-width top-0 border-b border-outline-variant shadow-sm flex justify-between items-center w-full px-lg h-16 max-w-container-max mx-auto shrink-0 z-50">
+<div class="flex items-center gap-md">
+<h1 class="text-h2 font-h2 text-primary">PanelService</h1>
+</div>
+<div class="flex items-center gap-lg">
+<button class="bg-primary-container text-on-primary font-label-md text-label-md px-md py-sm rounded-DEFAULT flex items-center gap-xs hover:bg-on-primary-fixed-variant transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Add New Maintenance
+            </button>
+<div class="flex items-center gap-sm">
+<img alt="User Role Profile" class="w-8 h-8 rounded-full object-cover" data-alt="A professional headshot of a corporate maintenance administrator in a well-lit modern office setting. The lighting is soft and natural, emphasizing dependability and competence. The image is cropped in a tight circle to serve as a high-quality avatar in a professional web application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrAl-CCLejLT32_0SuTYbl0RZrt2yxFg3OKLhDCbqgEO5O-kKblBWiodDrrluTScgh9az6v0Y_5-bk6zxg6Jh2yDcpmgtqFYX7jerO3b_NP7UdcrqsfkoGM2fazzx0O7mzTvtz78Bfo9evfi8JOSIgLIKTsSVKpM_uvaJs3HGYkLLxIRTPqGKS9apBTdMiSYjP1M3V1WRU_pMtTBBhg_hcymAJr3kLfEexyXytUm6FjpzMD4TM8SGg">
+<span class="font-label-md text-label-md text-on-surface">Admin</span>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<nav class="bg-surface-container-low text-primary font-label-md text-label-md h-screen w-64 hidden lg:flex flex-col border-r border-outline-variant flat no shadows p-md gap-sm shrink-0 z-40">
+<div class="flex items-center gap-sm mb-lg px-sm">
+<img alt="User Avatar" class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a corporate maintenance administrator in a well-lit modern office setting. The lighting is soft and natural, emphasizing dependability and competence. The image is cropped in a tight circle to serve as a high-quality avatar in a professional web application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX-WAtbJd9RhWVAq0dUZDhC-QtPUYeqPoXak6-EgYPWvf2oaSggBiCR1NIzyiYC2kOcoPPUBX58s8Dnufeei6TabIQ6tGWkGkkG9bCPOdJFIez0Er0ceiS9TERj5LMljnYG5WvGZvckfsp8EeYrgIJ_xMmyEyylw9Q2vP8lk6kur-KFha8XXSbiCzvjxysEMjCgi-qHQxujsHx73XX0iwaFCIq7ieDYDQi1ila73aWQiWofMz0IzQ2">
+<div>
+<div class="text-h2 font-h2 text-primary text-[16px] leading-tight">PanelService</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Maintenance Admin</div>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary font-label-md text-label-md px-md py-sm rounded-DEFAULT flex items-center justify-center gap-xs hover:bg-on-primary-fixed-variant transition-colors w-full mb-md">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Create Ticket
+            </button>
+<div class="flex-1 flex flex-col gap-xs">
+<a class="bg-secondary-container text-on-secondary-container rounded-lg font-bold flex items-center gap-sm px-md py-sm transition-all duration-200 hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="">Tickets</span>
+</a>
+
+
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-sm px-md py-sm transition-all duration-200 hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assessment">assessment</span>
+<span class="">Reports</span>
+</a>
+</div>
+<div class="flex flex-col gap-xs mt-auto pt-md border-t border-outline-variant">
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-sm px-md py-sm transition-all duration-200 hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="">Settings</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-sm px-md py-sm transition-all duration-200 hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+<span class="">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-surface-container-lowest relative p-lg">
+<div class="max-w-container-max mx-auto space-y-lg">
+<!-- Controls Bar -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md bg-surface p-md rounded-lg shadow-sm border border-outline-variant/30">
+<div class="flex-1 w-full relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full h-10 pl-xl pr-sm bg-surface-lowest border border-outline-variant rounded-DEFAULT font-body-sm text-body-sm focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all text-on-surface placeholder:text-outline" placeholder="Search Customer Name or Phone..." type="text">
+</div>
+<div class="flex flex-wrap items-center gap-sm w-full md:w-auto">
+<select class="h-10 pl-sm pr-lg bg-surface-lowest border border-outline-variant rounded-DEFAULT font-body-sm text-body-sm focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all text-on-surface appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23737686%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_8px_center] bg-[length:16px_16px]">
+<option value="">Assigned Person</option>
+<option value="john">John Doe</option>
+<option value="jane">Jane Smith</option>
+</select>
+<select class="h-10 pl-sm pr-lg bg-surface-lowest border border-outline-variant rounded-DEFAULT font-body-sm text-body-sm focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all text-on-surface appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23737686%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_8px_center] bg-[length:16px_16px]">
+<option value="">Status</option>
+<option value="open">Open</option>
+<option value="processing">Processing</option>
+<option value="closed">Closed</option>
+</select>
+<button class="h-10 px-sm bg-surface-lowest border border-outline-variant rounded-DEFAULT font-label-md text-label-md text-secondary hover:bg-surface-container-low transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">sort</span>
+                            Sort
+                        </button>
+<label class="flex items-center gap-xs cursor-pointer ml-auto md:ml-sm">
+<div class="relative">
+<input class="sr-only peer" type="checkbox">
+<div class="w-10 h-6 bg-surface-variant rounded-full peer peer-checked:bg-primary-container peer-focus:ring-2 peer-focus:ring-primary-container/20 transition-colors after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Show Closed</span>
+</label>
+</div>
+</div>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-md">
+<!-- Ticket Card 1 -->
+<div class="bg-surface rounded-lg shadow-sm border border-outline-variant/30 p-md flex flex-col gap-md hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-code text-code text-secondary">#TK-1001</span>
+<span class="bg-error-container text-on-error-container font-label-md text-label-md px-2 py-1 rounded-full uppercase">High Priority</span>
+</div>
+<div class="z-10">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Acme Corp HQ - Main Panel</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Customer: Sarah Jenkins</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Panel Type: Industrial 480V</p>
+</div>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-outline-variant/50 z-10">
+<span class="bg-surface-variant text-on-surface-variant font-label-md text-label-md px-2 py-1 rounded-full uppercase">Open</span>
+<div class="flex items-center gap-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Assigned:</span>
+<img alt="Tech Avatar" class="w-6 h-6 rounded-full object-cover" data-alt="A small professional avatar of a male maintenance technician in a uniform, smiling confidently. Bright, professional lighting suitable for a corporate application dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkNPi3FPUIk296zI8PVT6shaNz4bFWRPugGg09WXEix3spry5xURYTIiO_0QM4t9eNJKlBCQGQ2_bhySmZq2p6mds5TeKB-y-rGJDAl4dHco2A2lvJdKuEZHBwaJ0vkK2JVkckjmVcwG07AnOxPxA7RoCiNF5aBp0Zf-JuRrW59ADP2nWCCRSJQgVEhdVHEE_S4kkZLp2aCXU7dH1LYhAg1Mt2FUWF8avOUDGihn7vNKg7ucK6ESFc">
+</div>
+</div>
+</div>
+<!-- Ticket Card 2 -->
+<div class="bg-surface rounded-lg shadow-sm border border-outline-variant/30 p-md flex flex-col gap-md hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-code text-code text-secondary">#TK-1002</span>
+<span class="bg-tertiary-container text-on-tertiary-container font-label-md text-label-md px-2 py-1 rounded-full uppercase">Medium Priority</span>
+</div>
+<div class="z-10">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Tech Campus - Subpanel B</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Customer: Mike Ross</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Panel Type: Commercial 240V</p>
+</div>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-outline-variant/50 z-10">
+<span class="bg-secondary-container text-on-secondary-container font-label-md text-label-md px-2 py-1 rounded-full uppercase">Processing</span>
+<div class="flex items-center gap-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Assigned:</span>
+<img alt="Tech Avatar" class="w-6 h-6 rounded-full object-cover" data-alt="A small professional avatar of a female maintenance technician with safety gear, looking focused. High-key lighting, corporate B2B application style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkFXtXP214EpCtjNxHCQrdZM1bTcFOMLAh4H4V0ykaYjfqB4pW9uP4v7ul9gtQmBPcg7_IY3tkWXICKzwTIZS4j0kCSJQEn7e7fZT8EA9ADK1cY4cmGxhnNhr849i627rKxvbSfBn1kSYOUrFSpHoopaskuZygw1zXK1Emi8EjdRXPLxpS1LfXR0uSCB5g0caWJpm4TBOnPRPKnM8bzMAhAX4dyjbczz9ZdX49b1MaYcHKTrG4A2Oq">
+</div>
+</div>
+</div>
+<!-- Ticket Card 3 -->
+<div class="bg-surface rounded-lg shadow-sm border border-outline-variant/30 p-md flex flex-col gap-md hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="flex justify-between items-start z-10">
+<span class="font-code text-code text-secondary">#TK-1003</span>
+<span class="bg-surface-variant text-on-surface-variant font-label-md text-label-md px-2 py-1 rounded-full uppercase">Low Priority</span>
+</div>
+<div class="z-10">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-xs">Downtown Clinic - Backup Generator</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Customer: Dr. Emily Chen</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Panel Type: Emergency Transfer Switch</p>
+</div>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-outline-variant/50 z-10">
+<span class="bg-surface-variant text-on-surface-variant font-label-md text-label-md px-2 py-1 rounded-full uppercase">Open</span>
+<div class="flex items-center gap-xs">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Unassigned</span>
+<span class="material-symbols-outlined text-[20px] text-outline">person_off</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+
+</body></html>

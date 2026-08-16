@@ -1,0 +1,286 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PanelService - Add New User</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#0b1c30",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b4c5ff",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "outline": "#737686",
+                        "secondary-fixed": "#d3e4fe",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-dim": "#d9dadb",
+                        "primary": "#004ac6",
+                        "secondary": "#505f76",
+                        "background": "#f8f9fa",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#ffede6",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-secondary-container": "#54647a",
+                        "surface-bright": "#f8f9fa",
+                        "on-surface": "#191c1d",
+                        "on-background": "#191c1d",
+                        "outline-variant": "#c3c6d7",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#0053db",
+                        "tertiary-container": "#bc4800",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-container": "#d0e1fb",
+                        "tertiary": "#943700",
+                        "on-primary": "#ffffff",
+                        "surface": "#f8f9fa",
+                        "surface-variant": "#e1e3e4",
+                        "primary-container": "#2563eb",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "tertiary-fixed": "#ffdbcd",
+                        "inverse-surface": "#2e3132",
+                        "error": "#ba1a1a",
+                        "surface-container": "#edeeef",
+                        "on-surface-variant": "#434655",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed": "#00174b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "container-max": "1280px",
+                        "md": "16px",
+                        "gutter": "20px",
+                        "lg": "24px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "sm": "8px"
+                    },
+                    "fontFamily": {
+                        "h1-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "code": ["jetbrainsMono"],
+                        "h2": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "h1-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "h1": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "code": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h2": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .custom-shadow { box-shadow: 0px 1px 3px rgba(0,0,0,0.1), 0px 1px 2px rgba(0,0,0,0.06); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container border-r border-outline-variant shadow-sm z-40">
+<div class="px-lg py-md border-b border-outline-variant">
+<div class="flex items-center gap-sm">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A clean, minimalist abstract logo for a software company called PanelService, featuring geometric shapes in shades of blue on a white background, corporate style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeFRPpSBo-aRV0NuX43IpCMT1gFzrJbvliNWOv6CqAu92KqpkUczE96Aen2iF8QvwQj5FyU3K1ahOI19AItO2nb8EpDJ6eccPH7GAAQ7jBVcRcCRids0OzOtU8240IV4ZDWdLsN9G3lx6MczzgewJWkkv_3Lz6QGok17xhvqpdNWU9pQtqzglWfs1XYaCFQBZEyzdl0ll2djqpFqyMvN1XXQGH1qWWNKkOz_RoID6srkqSxAnN6Ceb">
+<div>
+<h1 class="font-h2 text-h2 font-black text-primary">PanelService</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Admin Console</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 py-md flex flex-col gap-xs overflow-y-auto">
+<a class="group flex items-center space-x-md px-lg py-md text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md"><span style="letter-spacing: 0.6px;" class="">Tickets</span><br></span>
+</a>
+
+<a class="group flex items-center space-x-md px-lg py-md text-primary font-bold border-r-4 border-primary bg-primary-container/10 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group" data-weight="fill" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-label-md text-label-md">Users</span>
+</a>
+<a class="group flex items-center space-x-md px-lg py-md text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="assessment">assessment</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+
+</nav>
+<div class="border-t border-outline-variant py-md">
+<a class="group flex items-center space-x-md px-lg py-md text-on-surface-variant hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface flex justify-between items-center w-full px-lg h-16 z-50 border-b border-outline-variant sticky top-0">
+<div class="flex items-center">
+<span class="font-h2 text-h2 font-bold text-primary md:hidden">PanelService</span>
+<!-- Search bar omitted as per search_bar: "on_left" implies it could be here, but focus is on Add User form -->
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors p-sm rounded-full cursor-pointer active:opacity-80 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors p-sm rounded-full cursor-pointer active:opacity-80 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="font-label-md text-label-md text-secondary hover:bg-surface-container-low transition-colors px-md py-sm rounded-lg cursor-pointer active:opacity-80">Support</button>
+<button class="font-label-md text-label-md bg-primary-container text-on-primary hover:opacity-90 transition-opacity px-md py-sm rounded-lg cursor-pointer active:opacity-80">New Ticket</button>
+<div class="h-8 w-8 rounded-full bg-surface-variant overflow-hidden cursor-pointer">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A generic user profile avatar illustration, simple line art style on a light grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYcuxs9JAze0PZd7BMF3KOnbwFvm5WUEH382TICE6H2zSsXsWboYNJl3bSw4GhgGb6dNnUCuNuRGgEzm2qBwQAQlK01nh6IEg5lQRkoAdighuf939s5IpHIDXdlvkgUGq9tm8NC_M1T1hN76GO6GBotHs8WWEzJb5R0nSCaIYFBT-tuTiUcB_413wgHNM7AGd6oINJgBXDZCFDLDoPLI92TD5MgFBX7ojXoAgT7ATXkktUlLouwH9K">
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 p-md md:p-lg lg:p-xl bg-background flex justify-center">
+<div class="w-full max-w-4xl flex flex-col gap-lg">
+<!-- Header -->
+<div class="flex flex-col gap-xs">
+<div class="flex items-center gap-sm text-on-surface-variant font-body-sm text-body-sm">
+<a class="hover:text-primary transition-colors" href="#">Users</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="text-on-surface">Add New User</span>
+</div>
+<h2 class="font-h1 text-h1 text-on-surface">Add New User</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Create a new account and configure their access permissions.</p>
+</div>
+<!-- Form Container -->
+<div class="bg-surface rounded-lg custom-shadow p-md md:p-lg">
+<form class="flex flex-col gap-xl">
+<!-- Personal Info Section -->
+<div class="flex flex-col md:flex-row gap-lg md:gap-xl border-b border-outline-variant pb-xl">
+<div class="md:w-1/3">
+<h3 class="font-h2 text-h2 text-on-surface mb-sm">Personal Information</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Basic details for the user's profile.</p>
+</div>
+<div class="md:w-2/3 flex flex-col gap-md">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface" for="fullName">Full Name <span class="text-error">*</span></label>
+<input class="h-10 rounded-lg border border-outline px-sm font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" id="fullName" name="fullName" placeholder="Jane Doe" required="" type="text">
+</div>
+<div class="flex flex-col md:flex-row gap-md">
+<div class="flex flex-col gap-xs flex-1">
+<label class="font-label-md text-label-md text-on-surface" for="email">Email Address <span class="text-error">*</span></label>
+<input class="h-10 rounded-lg border border-outline px-sm font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" id="email" name="email" placeholder="jane.doe@example.com" required="" type="email">
+</div>
+<div class="flex flex-col gap-xs flex-1">
+<label class="font-label-md text-label-md text-on-surface" for="phone">Phone Number</label>
+<input class="h-10 rounded-lg border border-outline px-sm font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" id="phone" name="phone" placeholder="+1 (555) 000-0000" type="tel">
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface" for="department">Department/Team <span class="text-on-surface-variant font-normal">(Optional)</span></label>
+<input class="h-10 rounded-lg border border-outline px-sm font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" id="department" name="department" placeholder="e.g. Support, Engineering" type="text">
+</div><div class="flex flex-col gap-xs">
+    <label class="font-label-md text-label-md text-on-surface" for="password">Password <span class="text-error">*</span></label>
+    <div class="relative">
+        <input class="h-10 w-full rounded-lg border border-outline px-sm pr-10 font-body-md text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" id="password" name="password" placeholder="••••••••" required="" type="password">
+        <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center">
+            <span class="material-symbols-outlined text-sm">visibility</span>
+        </button>
+    </div>
+    <p class="font-body-sm text-body-sm text-on-surface-variant">Must be at least 8 characters and include a number.</p>
+</div>
+</div>
+</div>
+<!-- Role & Permissions Section -->
+<div class="flex flex-col md:flex-row gap-lg md:gap-xl pb-xl">
+<div class="md:w-1/3">
+<h3 class="font-h2 text-h2 text-on-surface mb-sm">Role &amp; Permissions</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Define what this user can see and do within PanelService.</p>
+</div>
+<div class="md:w-2/3 flex flex-col gap-lg">
+<!-- Role Selection -->
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-on-surface">System Role <span class="text-error">*</span></label>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Admin Role -->
+<label class="relative flex flex-col p-md rounded-lg border border-outline-variant cursor-pointer hover:border-primary transition-colors bg-surface-container-lowest has-[:checked]:border-primary has-[:checked]:bg-primary-container/5 has-[:checked]:ring-1 has-[:checked]:ring-primary">
+<div class="flex items-center justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-label-md text-label-md text-on-surface">Admin</span>
+</div>
+<input class="text-primary focus:ring-primary w-4 h-4" name="role" type="radio" value="admin">
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Full access to all settings, users, and tickets.</p>
+</label>
+<!-- Employee Role -->
+<label class="relative flex flex-col p-md rounded-lg border border-outline-variant cursor-pointer hover:border-primary transition-colors bg-surface-container-lowest has-[:checked]:border-primary has-[:checked]:bg-primary-container/5 has-[:checked]:ring-1 has-[:checked]:ring-primary">
+<div class="flex items-center justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="badge">badge</span>
+<span class="font-label-md text-label-md text-on-surface">Employee</span>
+</div>
+<input checked="" class="text-primary focus:ring-primary w-4 h-4" name="role" type="radio" value="employee">
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Can manage assigned tickets and standard tools.</p>
+</label>
+<!-- Observer Role -->
+<label class="relative flex flex-col p-md rounded-lg border border-outline-variant cursor-pointer hover:border-primary transition-colors bg-surface-container-lowest has-[:checked]:border-primary has-[:checked]:bg-primary-container/5 has-[:checked]:ring-1 has-[:checked]:ring-primary">
+<div class="flex items-center justify-between mb-sm">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="visibility">visibility</span>
+<span class="font-label-md text-label-md text-on-surface">Observer</span>
+</div>
+<input class="text-primary focus:ring-primary w-4 h-4" name="role" type="radio" value="observer">
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Read-only access to specific dashboards and reports.</p>
+</label>
+</div>
+</div>
+<!-- Granular Permissions -->
+<div class="flex flex-col gap-sm mt-md">
+
+
+</div>
+</div>
+</div>
+<!-- Form Actions -->
+<div class="flex items-center justify-end gap-md pt-md border-t border-outline-variant">
+<button class="px-lg py-sm rounded-lg border border-outline-variant text-secondary font-label-md text-label-md hover:bg-surface-container-low transition-colors focus:outline-none focus:ring-2 focus:ring-secondary/20" type="button">
+                                Cancel
+                            </button>
+<button class="px-lg py-sm rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-sm flex items-center gap-xs" type="submit">
+<span class="material-symbols-outlined text-sm" data-icon="person_add">person_add</span>
+                                Create User
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</main>
+</div>
+
+
+</body></html>

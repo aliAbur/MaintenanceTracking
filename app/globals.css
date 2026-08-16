@@ -2,55 +2,93 @@
 
 @theme {
   --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
-  --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 
-  --color-rams-bg: #f9f9f9;
-  --color-rams-surface: #ffffff;
-  --color-rams-border: #e0e0e0;
-  --color-rams-text: #1a1a1a;
-  --color-rams-text-muted: #737373;
-  --color-rams-accent: #0047FF; /* Functional, stark blue */
-  --color-rams-danger: #E03131;
-  --color-rams-warning: #F59F00;
-  --color-rams-success: #099268;
+  /* Colors mapped to our Material 3 CSS variables */
+  --color-background: var(--md-sys-color-background);
+  --color-on-background: var(--md-sys-color-on-background);
+  
+  --color-surface: var(--md-sys-color-surface);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  
+  --color-surface-container-lowest: var(--md-sys-color-surface-container-lowest);
+  --color-surface-container-low: var(--md-sys-color-surface-container-low);
+  --color-surface-container: var(--md-sys-color-surface-container);
+  --color-surface-container-high: var(--md-sys-color-surface-container-high);
+  --color-surface-container-highest: var(--md-sys-color-surface-container-highest);
+  
+  --color-primary: var(--md-sys-color-primary);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+  
+  --color-secondary: var(--md-sys-color-secondary);
+  --color-on-secondary: var(--md-sys-color-on-secondary);
+  --color-secondary-container: var(--md-sys-color-secondary-container);
+  --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
 
-  --shadow-rams: 0 4px 20px rgba(0, 0, 0, 0.04);
+  --color-tertiary: var(--md-sys-color-tertiary);
+  --color-on-tertiary: var(--md-sys-color-on-tertiary);
+  --color-tertiary-container: var(--md-sys-color-tertiary-container);
+  --color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+  
+  --color-error: var(--md-sys-color-error);
+  --color-on-error: var(--md-sys-color-on-error);
+  --color-error-container: var(--md-sys-color-error-container);
+  --color-on-error-container: var(--md-sys-color-on-error-container);
+  
+  --color-outline: var(--md-sys-color-outline);
+  --color-outline-variant: var(--md-sys-color-outline-variant);
+
+  /* Spacing Scale */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-gutter: 20px;
+  
+  /* Layout Constraints */
+  --container-max: 1280px;
+
+  /* Typography Scale from reference */
+  --text-h1: 36px;
+  --text-h1--line-height: 44px;
+  --text-h1--letter-spacing: -0.02em;
+  
+  --text-h2: 24px;
+  --text-h2--line-height: 32px;
+  --text-h2--letter-spacing: -0.01em;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.05em;
+  
+  --text-code: 14px;
+  --text-code--line-height: 20px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-@layer base {
-  :root {
-    --background: var(--color-rams-bg);
-    --foreground: var(--color-rams-text);
-  }
+@import "../.design/panel-service/DESIGN_TOKENS.css";
 
+@layer base {
   body {
-    background-color: var(--background);
-    color: var(--foreground);
+    background-color: var(--color-background);
+    color: var(--color-on-surface);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.01em;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
-    letter-spacing: -0.03em;
-    font-weight: 500;
-  }
-
-  /* Dieter Rams input styles */
-  input, select, textarea {
-    background-color: var(--color-rams-bg);
-    border: 1px solid var(--color-rams-border);
-    border-radius: 4px;
-    padding: 0.75rem 1rem;
-    font-family: var(--font-sans);
-    transition: all 0.2s ease;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--color-rams-accent);
-    box-shadow: 0 0 0 1px var(--color-rams-accent);
-    background-color: var(--color-rams-surface);
   }
 }

@@ -32,102 +32,125 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
   };
 
   const statusColors = {
-    'Open': 'text-rams-accent',
-    'Processing': 'text-rams-warning',
-    'OnHold': 'text-rams-danger',
-    'Closed': 'text-rams-text-muted',
+    'Open': 'bg-primary-container text-on-primary-container',
+    'Processing': 'bg-secondary-container text-on-secondary-container',
+    'OnHold': 'bg-error-container text-on-error-container',
+    'Closed': 'bg-surface-variant text-on-surface-variant',
   };
 
   const priorityColors = {
-    Low: 'border-rams-border text-rams-text',
-    Medium: 'border-rams-warning/30 text-rams-warning',
-    High: 'border-rams-danger/30 text-rams-danger',
+    Low: 'bg-surface-variant text-on-surface-variant',
+    Medium: 'bg-tertiary-container text-on-tertiary-container',
+    High: 'bg-error-container text-on-error-container',
   };
 
   const formatStatus = (status: string) => status === 'OnHold' ? 'On-Hold' : status;
 
   return (
-    <div className="max-w-6xl mx-auto animate-in fade-in duration-700">
-      <div className="mb-12">
-        <Link href="/" className="inline-flex items-center text-xs font-mono font-medium tracking-widest text-rams-text-muted hover:text-rams-text transition-colors border-b border-transparent hover:border-rams-text pb-0.5">
-          ← BACK TO REGISTRY
+    <div className="max-w-6xl mx-auto animate-in fade-in duration-500">
+      <div className="mb-6 flex items-center">
+        <Link href="/" className="inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors bg-surface hover:bg-surface-container-highest px-3 py-1.5 rounded-full">
+          <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+          Back to Registry
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Left Column: Ticket Details */}
-        <div className="lg:col-span-8 space-y-8">
-          <article className="bg-rams-surface border border-rams-border rounded-[4px]">
+        <div className="lg:col-span-8 space-y-6">
+          <article className="bg-surface border border-outline-variant/30 rounded-xl shadow-sm overflow-hidden">
             {/* Header */}
-            <header className="p-8 border-b border-rams-border flex flex-col sm:flex-row sm:items-start justify-between gap-6">
+            <header className="p-6 sm:p-8 bg-surface-container-lowest border-b border-outline-variant/50 flex flex-col sm:flex-row sm:items-start justify-between gap-6">
               <div>
-                <div className="flex items-center gap-4 mb-3">
-                  <h1 className="text-3xl font-display text-rams-text tracking-tight">{ticket.customerName}</h1>
-                  <span className={`px-2 py-0.5 border text-[10px] font-mono uppercase tracking-widest rounded-sm ${priorityColors[ticket.priority]}`}>
-                    {ticket.priority} PR
+                <div className="flex items-center gap-3 mb-2">
+                  <h1 className="text-3xl font-bold text-on-surface tracking-tight leading-tight">{ticket.customerName}</h1>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-sm text-secondary">#{ticket.id}</span>
+                  <span className={`px-2.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wide ${priorityColors[ticket.priority]}`}>
+                    {ticket.priority} Priority
                   </span>
                 </div>
-                <p className="text-sm font-mono text-rams-text-muted">
-                  ID: {ticket.id}
-                </p>
               </div>
               
-              <div className="flex flex-col items-end gap-2 shrink-0">
-                <label className="text-[10px] font-mono tracking-widest uppercase text-rams-text-muted">System Status</label>
-                <div className="relative">
+              <div className="flex flex-col items-end shrink-0 bg-surface-container-low p-4 rounded-xl border border-outline-variant/30">
+                <label className="text-xs font-semibold text-on-surface-variant mb-2">System Status</label>
+                <div className="relative w-40">
                   <select 
                     disabled={isUpdating}
                     value={ticket.status}
                     onChange={(e) => handleStatusChange(e.target.value as TicketStatus)}
-                    className={`appearance-none bg-rams-bg border border-rams-border rounded-[2px] py-2 pl-4 pr-10 text-sm font-mono font-medium focus:border-rams-text focus:ring-0 cursor-pointer transition-colors ${statusColors[ticket.status]} ${isUpdating ? 'opacity-50' : ''}`}
+                    className={`appearance-none w-full border border-outline-variant/50 rounded-lg py-2 pl-4 pr-10 text-sm font-semibold focus:ring-2 focus:ring-primary-container/20 cursor-pointer transition-all ${statusColors[ticket.status]} ${isUpdating ? 'opacity-50' : ''}`}
                   >
-                    <option value="Open" className="text-rams-text">OPEN</option>
-                    <option value="Processing" className="text-rams-text">PROCESSING</option>
-                    <option value="OnHold" className="text-rams-text">ON-HOLD</option>
-                    <option value="Closed" className="text-rams-text">CLOSED</option>
+                    <option value="Open" className="text-on-surface bg-surface">Open</option>
+                    <option value="Processing" className="text-on-surface bg-surface">Processing</option>
+                    <option value="OnHold" className="text-on-surface bg-surface">On-Hold</option>
+                    <option value="Closed" className="text-on-surface bg-surface">Closed</option>
                   </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-rams-text-muted">
-                    ↓
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-current opacity-70">
+                    <span className="material-symbols-outlined text-[20px]">expand_more</span>
                   </div>
                 </div>
               </div>
             </header>
 
             {/* Metadata Grid */}
-            <div className="p-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-[10px] font-mono tracking-widest uppercase text-rams-text-muted mb-1">Hardware Model</h3>
-                  <p className="text-sm text-rams-text">{ticket.panelType}</p>
+            <div className="p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+              <div className="flex gap-4 items-start">
+                <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined">memory</span>
                 </div>
                 <div>
-                  <h3 className="text-[10px] font-mono tracking-widest uppercase text-rams-text-muted mb-1">Contact Number</h3>
-                  <p className="text-sm font-mono text-rams-text">{ticket.customerPhone || 'UNLISTED'}</p>
+                  <h3 className="text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wide">Hardware Model</h3>
+                  <p className="text-base text-on-surface font-medium">{ticket.panelType}</p>
                 </div>
               </div>
-              <div className="space-y-6">
+              
+              <div className="flex gap-4 items-start">
+                <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined">call</span>
+                </div>
                 <div>
-                  <h3 className="text-[10px] font-mono tracking-widest uppercase text-rams-text-muted mb-1">Initialization Date</h3>
-                  <p className="text-sm font-mono text-rams-text">
+                  <h3 className="text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wide">Contact Number</h3>
+                  <p className="text-base text-on-surface font-medium">{ticket.customerPhone || 'Unlisted'}</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 items-start">
+                <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined">event</span>
+                </div>
+                <div>
+                  <h3 className="text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wide">Initialization Date</h3>
+                  <p className="text-base font-mono text-on-surface font-medium">
                     {format(new Date(ticket.createdAt), 'yyyy-MM-dd HH:mm:ss')}
                   </p>
                 </div>
+              </div>
+
+              <div className="flex gap-4 items-start">
+                <div className="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined">badge</span>
+                </div>
                 <div>
-                  <h3 className="text-[10px] font-mono tracking-widest uppercase text-rams-text-muted mb-1">Assigned Operator</h3>
-                  <p className="text-sm text-rams-text">{ticket.assignee?.fullName || '—'}</p>
+                  <h3 className="text-xs font-semibold text-on-surface-variant mb-1 uppercase tracking-wide">Assigned Operator</h3>
+                  <p className="text-base text-on-surface font-medium">{ticket.assignee?.fullName || 'Unassigned'}</p>
                 </div>
               </div>
             </div>
 
             {/* Diagnostic Notes */}
             {ticket.specialNotes && (
-              <div className="border-t border-rams-border">
-                <div className="p-8 bg-rams-bg/50">
-                  <h3 className="text-[10px] font-mono tracking-widest uppercase text-rams-text-muted mb-4">Diagnostic Notes</h3>
-                  <div className="text-sm text-rams-text whitespace-pre-wrap leading-relaxed">
+              <div className="border-t border-outline-variant/30 bg-surface-container-lowest p-6 sm:p-8">
+                <div className="flex items-center gap-2 mb-4 text-on-surface-variant">
+                  <span className="material-symbols-outlined text-[20px]">description</span>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide">Diagnostic Notes</h3>
+                </div>
+                <div className="bg-surface-container rounded-lg p-5">
+                  <p className="text-sm text-on-surface whitespace-pre-wrap leading-relaxed">
                     {ticket.specialNotes}
-                  </div>
+                  </p>
                 </div>
               </div>
             )}
@@ -136,35 +159,43 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
 
         {/* Right Column: Timeline */}
         <aside className="lg:col-span-4">
-          <div className="bg-rams-surface border border-rams-border rounded-[4px] p-6 sticky top-24">
-            <h2 className="text-[10px] font-mono tracking-widest uppercase text-rams-text-muted border-b border-rams-border pb-4 mb-6">
-              Event Log
-            </h2>
+          <div className="bg-surface border border-outline-variant/30 rounded-xl shadow-sm p-6 sticky top-24">
+            <div className="flex items-center gap-2 mb-6 border-b border-outline-variant/30 pb-4 text-on-surface">
+              <span className="material-symbols-outlined">history</span>
+              <h2 className="text-base font-bold">Event Log</h2>
+            </div>
             
-            <div className="relative">
+            <div className="relative pl-3">
               {/* Vertical line */}
-              <div className="absolute left-[7px] top-2 bottom-2 w-px bg-rams-border"></div>
+              <div className="absolute left-[11px] top-4 bottom-4 w-[2px] bg-outline-variant/50"></div>
               
               <ul className="space-y-6">
                 {auditLogs.map((log) => (
-                  <li key={log.id} className="relative pl-6">
-                    <div className={`absolute left-0 top-1.5 w-4 h-4 rounded-full border-[3px] border-rams-surface ${log.action.includes('Created') ? 'bg-rams-text-muted' : 'bg-rams-accent'}`}></div>
+                  <li key={log.id} className="relative pl-8">
+                    <div className={`absolute left-[-5px] top-1 w-8 h-8 rounded-full flex items-center justify-center ${log.action.includes('Created') ? 'bg-secondary-container text-on-secondary-container' : 'bg-primary-container text-on-primary-container'} ring-4 ring-surface`}>
+                      <span className="material-symbols-outlined text-[16px]">
+                        {log.action.includes('Created') ? 'add' : 'update'}
+                      </span>
+                    </div>
                     
-                    <div className="flex flex-col">
-                      <p className="text-sm font-medium text-rams-text mb-1">
+                    <div className="flex flex-col bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/30 shadow-sm">
+                      <p className="text-sm font-semibold text-on-surface mb-1">
                         {log.action}
                       </p>
                       {log.oldValue && log.newValue && (
-                        <p className="text-xs font-mono text-rams-text-muted mb-2">
-                          {formatStatus(log.oldValue)} → <span className="text-rams-text">{formatStatus(log.newValue)}</span>
+                        <p className="text-sm text-on-surface-variant mb-2 flex items-center gap-2">
+                          <span className="line-through opacity-70">{formatStatus(log.oldValue)}</span> 
+                          <span className="material-symbols-outlined text-[16px] text-outline">arrow_forward</span>
+                          <span className="font-semibold text-on-surface">{formatStatus(log.newValue)}</span>
                         </p>
                       )}
                       
-                      <div className="flex items-center justify-between mt-1">
-                        <span className="text-[10px] font-mono text-rams-text-muted uppercase">
-                          USR: {log.modifier?.fullName || 'SYS'}
+                      <div className="flex items-center justify-between mt-2 pt-2 border-t border-outline-variant/30">
+                        <span className="text-xs font-semibold text-secondary flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[14px]">person</span>
+                          {log.modifier?.fullName || 'System'}
                         </span>
-                        <time className="text-[10px] font-mono text-rams-text-muted" dateTime={typeof log.createdAt === 'string' ? log.createdAt : log.createdAt.toISOString()}>
+                        <time className="text-xs font-mono text-outline" dateTime={typeof log.createdAt === 'string' ? log.createdAt : log.createdAt.toISOString()}>
                           {format(new Date(log.createdAt), 'MMM d, HH:mm')}
                         </time>
                       </div>
@@ -174,13 +205,18 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
                 
                 {/* Fallback Initial Log */}
                 {auditLogs.length === 0 && (
-                  <li className="relative pl-6">
-                    <div className="absolute left-0 top-1.5 w-4 h-4 rounded-full border-[3px] border-rams-surface bg-rams-text-muted"></div>
-                    <div className="flex flex-col">
-                      <p className="text-sm font-medium text-rams-text mb-1">Ticket Initialized</p>
-                      <div className="flex items-center justify-between mt-1">
-                        <span className="text-[10px] font-mono text-rams-text-muted uppercase">USR: SYS</span>
-                        <time className="text-[10px] font-mono text-rams-text-muted" dateTime={typeof ticket.createdAt === 'string' ? ticket.createdAt : ticket.createdAt.toISOString()}>
+                  <li className="relative pl-8">
+                    <div className="absolute left-[-5px] top-1 w-8 h-8 rounded-full flex items-center justify-center bg-secondary-container text-on-secondary-container ring-4 ring-surface">
+                      <span className="material-symbols-outlined text-[16px]">add</span>
+                    </div>
+                    <div className="flex flex-col bg-surface-container-lowest p-3 rounded-lg border border-outline-variant/30 shadow-sm">
+                      <p className="text-sm font-semibold text-on-surface mb-2">Ticket Initialized</p>
+                      <div className="flex items-center justify-between mt-1 pt-2 border-t border-outline-variant/30">
+                        <span className="text-xs font-semibold text-secondary flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[14px]">smart_toy</span>
+                          System
+                        </span>
+                        <time className="text-xs font-mono text-outline" dateTime={typeof ticket.createdAt === 'string' ? ticket.createdAt : ticket.createdAt.toISOString()}>
                           {format(new Date(ticket.createdAt), 'MMM d, HH:mm')}
                         </time>
                       </div>

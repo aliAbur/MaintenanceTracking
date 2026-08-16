@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ticket Details - PanelService</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#004ac6",
+                        "inverse-surface": "#2e3132",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "surface-container-high": "#e7e8e9",
+                        "background": "#f8f9fa",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#bc4800",
+                        "secondary": "#505f76",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-container": "#ffede6",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f8f9fa",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#d3e4fe",
+                        "tertiary": "#943700",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f3f4f5",
+                        "on-surface-variant": "#434655",
+                        "outline-variant": "#c3c6d7",
+                        "inverse-primary": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "on-primary-container": "#eeefff",
+                        "on-background": "#191c1d",
+                        "surface-tint": "#0053db",
+                        "on-secondary-fixed": "#0b1c30",
+                        "surface-dim": "#d9dadb",
+                        "secondary-container": "#d0e1fb",
+                        "on-primary-fixed": "#00174b",
+                        "surface": "#f8f9fa",
+                        "on-secondary-fixed-variant": "#38485d",
+                        "on-secondary-container": "#54647a",
+                        "outline": "#737686",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "surface-variant": "#e1e3e4",
+                        "secondary-fixed-dim": "#b7c8e1",
+                        "tertiary-fixed": "#ffdbcd",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "primary-container": "#2563eb",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "gutter": "20px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                        "code": ["jetbrainsMono"],
+                        "h2": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "h1-mobile": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "h1": ["Inter"]
+                    },
+                    "fontSize": {
+                        "code": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h2": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "h1-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h1": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md md:hidden flex flex-col">
+<!-- Top Navigation (Task-focused, suppressing global nav) -->
+<header class="bg-surface w-full top-0 sticky border-b border-surface-variant shadow-sm flex justify-between items-center px-md py-sm z-50">
+<button class="flex items-center text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-full p-2 active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-h2 text-h2 text-on-surface">Ticket Details</h1>
+<button class="flex items-center text-primary hover:bg-surface-container-low transition-colors rounded-full p-2 active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow p-md flex flex-col gap-md">
+<!-- Ticket Info Card -->
+<section class="bg-surface-container-lowest rounded-lg shadow-sm border border-surface-variant p-md flex flex-col gap-sm">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="font-code text-code text-on-surface-variant">TCK-8924</span>
+<h2 class="font-h2 text-h2 text-on-surface mt-xs">Main Breaker Tripping</h2>
+</div>
+<div class="flex flex-col gap-xs items-end">
+<span class="bg-[#fef2f2] text-[#991b1b] font-label-md text-label-md px-2 py-1 rounded-full uppercase">High Priority</span>
+<span class="bg-[#f0fdf4] text-[#166534] font-label-md text-label-md px-2 py-1 rounded-full uppercase">In Progress</span>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-sm">
+<!-- Customer Info -->
+<div class="flex items-center gap-sm p-sm bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant fill">person</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant">Customer</span>
+<span class="font-body-md text-body-md text-on-surface">Eleanor Vance</span>
+</div>
+</div>
+<!-- Phone -->
+<div class="flex items-center gap-sm p-sm bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant fill">call</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant">Phone</span>
+<span class="font-body-md text-body-md text-on-surface">(555) 019-2834</span>
+</div>
+</div>
+<!-- Panel Details -->
+<div class="flex items-center gap-sm p-sm bg-surface-container-low rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant fill">electrical_services</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant">Panel Type</span>
+<span class="font-body-md text-body-md text-on-surface">Square D 200A QO</span>
+</div>
+</div>
+</div>
+<div class="mt-sm pt-sm border-t border-surface-variant flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Assigned to:</span>
+<div class="flex items-center gap-xs">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-variant">
+<img class="w-full h-full object-cover" data-alt="A small, circular avatar portrait of a maintenance technician in a modern, professional style. Light mode aesthetic, well-lit, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwYWf3Xy382FR33LrrtWdHL7H9ryvdS_fQpi7J59UO67svGv4BoSKhnihZ7_AMqLgsp-a2kMo3R_xIflhXPji2CSTrBp1wokOYX921nJ2pL6NsU3S52GROx9eYcGm_LPUVtR6kT6be7a7lR0c_CiDlT1rFVmFahex55XBY08B-So1MR5kXqhhp5lbcVeiWZ-cxUhj1hiEqUYgkZ-qGEwaKYEz91vFNh8BjsEvh5MCHEi6XdhDhNkoT"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface">Marcus T.</span>
+</div>
+</div>
+</section>
+<!-- Activity Timeline -->
+<section class="bg-surface-container-lowest rounded-lg shadow-sm border border-surface-variant p-md">
+<h3 class="font-h2 text-h2 text-on-surface mb-md">Activity</h3>
+<div class="relative pl-sm">
+<!-- Vertical Line -->
+<div class="absolute left-[15px] top-2 bottom-2 w-px bg-surface-variant"></div>
+<!-- Timeline Items -->
+<div class="flex flex-col gap-md">
+<!-- Item 1: Current Status -->
+<div class="relative flex gap-md items-start">
+<div class="w-4 h-4 rounded-full bg-primary flex-shrink-0 mt-1 relative z-10 border-4 border-surface-container-lowest shadow-sm"></div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant mb-xs">Today, 10:45 AM</span>
+<div class="bg-surface-container-low p-sm rounded-lg">
+<p class="font-body-md text-body-md text-on-surface font-semibold">Status changed to In Progress</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Marcus T. arrived on site and began diagnostics.</p>
+</div>
+</div>
+</div>
+<!-- Item 2: Assignment -->
+<div class="relative flex gap-md items-start">
+<div class="w-4 h-4 rounded-full bg-surface-variant flex-shrink-0 mt-1 relative z-10 border-4 border-surface-container-lowest"></div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant mb-xs">Today, 08:30 AM</span>
+<div class="bg-surface-container-low p-sm rounded-lg">
+<p class="font-body-md text-body-md text-on-surface">Assigned to Marcus T.</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Dispatched by Sarah J. (Dispatcher)</p>
+</div>
+</div>
+</div>
+<!-- Item 3: Creation -->
+<div class="relative flex gap-md items-start">
+<div class="w-4 h-4 rounded-full bg-surface-variant flex-shrink-0 mt-1 relative z-10 border-4 border-surface-container-lowest"></div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant mb-xs">Yesterday, 04:15 PM</span>
+<div class="bg-surface-container-low p-sm rounded-lg">
+<p class="font-body-md text-body-md text-on-surface">Ticket Created</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-xs">Customer reported main breaker tripping repeatedly under normal load.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Suppressed BottomNavBar due to Task-Focused Intent -->
+</body></html>
