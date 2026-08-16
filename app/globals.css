@@ -1,26 +1,56 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+  --color-rams-bg: #f9f9f9;
+  --color-rams-surface: #ffffff;
+  --color-rams-border: #e0e0e0;
+  --color-rams-text: #1a1a1a;
+  --color-rams-text-muted: #737373;
+  --color-rams-accent: #0047FF; /* Functional, stark blue */
+  --color-rams-danger: #E03131;
+  --color-rams-warning: #F59F00;
+  --color-rams-success: #099268;
+
+  --shadow-rams: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--color-rams-bg);
+    --foreground: var(--color-rams-text);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    font-weight: 500;
+  }
+
+  /* Dieter Rams input styles */
+  input, select, textarea {
+    background-color: var(--color-rams-bg);
+    border: 1px solid var(--color-rams-border);
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    font-family: var(--font-sans);
+    transition: all 0.2s ease;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--color-rams-accent);
+    box-shadow: 0 0 0 1px var(--color-rams-accent);
+    background-color: var(--color-rams-surface);
+  }
 }
