@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TicketStatus {
+  Open
+  Processing
+  OnHold
+  Closed
+}
+
+enum TicketPriority {
+  Low
+  Medium
+  High
+}
+
+enum UserRole {
+  Admin
+  Employee
+  Observer
+}
+
+model UserProfile {
+  id         String     @id @default(uuid())
+  email      String     @unique
+  fullName   String?
+  role       UserRole   @default(Employee)
+  createdAt  DateTime   @default(now())
+  
+  tickets    Ticket[]   @relation("TicketAssignee")
+  auditLogs  AuditLog[] @relation("AuditLogModifier")
+}
+
+model Ticket {
+  id            String         @id @default(uuid())
+  customerName  String
+  customerPhone String?
+  panelType     String
+  priority      TicketPriority @default(Low)
+  specialNotes  String?
+  assignedTo    String?
+  status        TicketStatus   @default(Open)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  assignee      UserProfile?   @relation("TicketAssignee", fields: [assignedTo], references: [id])
+  auditLogs     AuditLog[]
+}
+
+model AuditLog {
+  id         String       @id @default(uuid())
+  ticketId   String
+  modifiedBy String
+  action     String
+  oldValue   String?
+  newValue   String?
+  createdAt  DateTime     @default(now())
+
+  ticket     Ticket       @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  modifier   UserProfile  @relation("AuditLogModifier", fields: [modifiedBy], references: [id])
+}
