@@ -4,10 +4,12 @@ import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
-export default async function EditTicketPage({ params }: { params: { id: string } }) {
+export default async function EditTicketPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+
   const [users, ticket] = await Promise.all([
     prisma.userProfile.findMany({ orderBy: { fullName: 'asc' } }),
-    prisma.ticket.findUnique({ where: { id: params.id } })
+    prisma.ticket.findUnique({ where: { id: resolvedParams.id } })
   ]);
 
   if (!ticket) {
