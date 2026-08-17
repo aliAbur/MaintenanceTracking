@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation';
 import { createTicket } from '../lib/actions';
 import Link from 'next/link';
 
-export default function NewTicketForm() {
+import { UserProfile } from '@prisma/client';
+
+export default function NewTicketForm({ users }: { users: UserProfile[] }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -113,8 +115,11 @@ export default function NewTicketForm() {
               className={`${inputClasses} cursor-pointer appearance-none`}
             >
               <option value="">— Unassigned —</option>
-              <option value="user-1">John Doe (Tech)</option>
-              <option value="user-2">Jane Smith (Tech)</option>
+              {users.map(user => (
+                <option key={user.id} value={user.id}>
+                  {user.fullName || user.email} ({user.role})
+                </option>
+              ))}
             </select>
             <span className="material-symbols-outlined absolute right-3 bottom-3 text-outline pointer-events-none">expand_more</span>
           </div>
