@@ -75,6 +75,10 @@ export default function RootLayout({
                 <span className="material-symbols-outlined text-[20px]">assessment</span>
                 <span>Reports</span>
               </a>
+              <Link href="/users" className="text-on-surface-variant hover:bg-surface-container-high rounded-lg flex items-center gap-3 px-4 py-2.5 transition-all duration-200">
+                <span className="material-symbols-outlined text-[20px]">group</span>
+                <span>Users</span>
+              </Link>
             </div>
 
             <div className="flex flex-col gap-1 mt-auto pt-4 border-t border-outline-variant">
