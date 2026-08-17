@@ -137,3 +137,42 @@ export async function createUser(formData: FormData) {
 
   return user;
 }
+
+export async function updateTicketInfo(ticketId: string, formData: FormData) {
+  const customerName = formData.get('customerName') as string;
+  const customerPhone = formData.get('customerPhone') as string;
+  const panelType = formData.get('panelType') as string;
+  const priority = formData.get('priority') as TicketPriority;
+  const specialNotes = formData.get('specialNotes') as string;
+  const assignedTo = formData.get('assignedTo') as string;
+
+  const systemUserId = await getOrCreateSystemUser();
+
+  const ticket = await prisma.$transaction(async (tx) => {
+    const updatedTicket = await tx.ticket.update({
+      where: { id: ticketId },
+      data: {
+        customerName,
+        customerPhone: customerPhone || null,
+        panelType,
+        priority,
+        specialNotes: specialNotes || null,
+        assignedTo: assignedTo || null,
+      }
+    });
+
+    await tx.auditLog.create({
+      data: {
+        ticketId: ticketId,
+        modifiedBy: systemUserId,
+        action: 'Ticket Details Updated',
+        oldValue: null,
+        newValue: null
+      }
+    });
+
+    return updatedTicket;
+  });
+
+  return ticket;
+}

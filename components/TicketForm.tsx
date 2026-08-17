@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation';
 import { createTicket } from '../lib/actions';
 import Link from 'next/link';
 
-import { UserProfile } from '@prisma/client';
+import { UserProfile, Ticket } from '@prisma/client';
+import { updateTicketInfo } from '../lib/actions';
 
-export default function NewTicketForm({ users }: { users: UserProfile[] }) {
+export default function TicketForm({ users, initialData }: { users: UserProfile[], initialData?: Ticket }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isEditing = !!initialData;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -20,11 +23,16 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
     const formData = new FormData(e.currentTarget);
     
     try {
-      await createTicket(formData);
-      router.push('/');
+      if (isEditing) {
+        await updateTicketInfo(initialData.id, formData);
+        router.push(`/ticket/${initialData.id}`);
+      } else {
+        await createTicket(formData);
+        router.push('/');
+      }
       router.refresh();
     } catch (err: any) {
-      setError(err.message || 'Failed to create ticket');
+      setError(err.message || `Failed to ${isEditing ? 'update' : 'create'} ticket`);
     } finally {
       setIsSubmitting(false);
     }
@@ -35,16 +43,16 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in duration-500">
       <div className="mb-6 flex items-center">
-        <Link href="/" className="inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors bg-surface hover:bg-surface-container-highest px-3 py-1.5 rounded-full">
+        <Link href={isEditing ? `/ticket/${initialData.id}` : "/"} className="inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors bg-surface hover:bg-surface-container-highest px-3 py-1.5 rounded-full">
           <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-          Back to Registry
+          Back
         </Link>
       </div>
 
       <div className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 overflow-hidden">
         <div className="px-8 py-6 border-b border-outline-variant/50 bg-surface-container-lowest">
-          <h1 className="text-2xl font-bold text-on-surface">New Request Entry</h1>
-          <p className="text-sm text-on-surface-variant mt-1">Initialize a new hardware maintenance ticket.</p>
+          <h1 className="text-2xl font-bold text-on-surface">{isEditing ? 'Edit Ticket' : 'New Request Entry'}</h1>
+          <p className="text-sm text-on-surface-variant mt-1">{isEditing ? 'Update hardware maintenance ticket information.' : 'Initialize a new hardware maintenance ticket.'}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-8">
@@ -63,6 +71,7 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
                 type="text"
                 id="customerName"
                 name="customerName"
+                defaultValue={initialData?.customerName}
                 className={inputClasses}
                 placeholder="e.g. Acme Corp"
               />
@@ -73,6 +82,7 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
                 type="tel"
                 id="customerPhone"
                 name="customerPhone"
+                defaultValue={initialData?.customerPhone || ''}
                 className={inputClasses}
                 placeholder="+1 (000) 000-0000"
               />
@@ -87,6 +97,7 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
                 type="text"
                 id="panelType"
                 name="panelType"
+                defaultValue={initialData?.panelType}
                 className={inputClasses}
                 placeholder="Device ID / Model Name"
               />
@@ -97,6 +108,7 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
                 required
                 id="priority"
                 name="priority"
+                defaultValue={initialData?.priority || 'Low'}
                 className={`${inputClasses} cursor-pointer appearance-none`}
               >
                 <option value="Low">Low</option>
@@ -112,6 +124,7 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
             <select
               id="assignedTo"
               name="assignedTo"
+              defaultValue={initialData?.assignedTo || ''}
               className={`${inputClasses} cursor-pointer appearance-none`}
             >
               <option value="">— Unassigned —</option>
@@ -130,6 +143,7 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
               id="specialNotes"
               name="specialNotes"
               rows={4}
+              defaultValue={initialData?.specialNotes || ''}
               className={`${inputClasses} h-auto py-3 resize-y`}
               placeholder="Describe symptoms, error codes, and deployment environment."
             ></textarea>
@@ -137,7 +151,7 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
 
           <div className="pt-6 border-t border-outline-variant flex justify-end gap-3">
             <Link 
-              href="/"
+              href={isEditing ? `/ticket/${initialData?.id}` : "/"}
               className="px-6 py-2.5 text-sm font-semibold text-primary rounded-full hover:bg-primary/10 transition-colors"
             >
               Cancel
@@ -150,12 +164,12 @@ export default function NewTicketForm({ users }: { users: UserProfile[] }) {
               {isSubmitting ? (
                 <>
                   <span className="material-symbols-outlined animate-spin text-[18px]">progress_activity</span>
-                  Processing...
+                  {isEditing ? 'Updating...' : 'Processing...'}
                 </>
               ) : (
                 <>
                   <span className="material-symbols-outlined text-[18px]">save</span>
-                  Submit Record
+                  {isEditing ? 'Save Changes' : 'Submit Record'}
                 </>
               )}
             </button>

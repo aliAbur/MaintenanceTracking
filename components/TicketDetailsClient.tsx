@@ -48,10 +48,14 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
 
   return (
     <div className="max-w-6xl mx-auto animate-in fade-in duration-500">
-      <div className="mb-6 flex items-center">
+      <div className="mb-6 flex items-center justify-between">
         <Link href="/" className="inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors bg-surface hover:bg-surface-container-highest px-3 py-1.5 rounded-full">
           <span className="material-symbols-outlined text-[18px]">arrow_back</span>
           Back to Registry
+        </Link>
+        <Link href={`/ticket/${ticket.id}/edit`} className="inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors bg-surface hover:bg-surface-container-highest px-3 py-1.5 rounded-full border border-outline-variant/30">
+          <span className="material-symbols-outlined text-[18px]">edit</span>
+          Edit Ticket
         </Link>
       </div>
 

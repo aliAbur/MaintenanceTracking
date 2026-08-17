@@ -1,4 +1,4 @@
-import NewTicketForm from '../../../components/NewTicketForm';
+import TicketForm from '../../../components/TicketForm';
 import { prisma } from '../../../lib/prisma';
 
 export const dynamic = 'force-dynamic';
@@ -8,5 +8,5 @@ export default async function NewTicketPage() {
     orderBy: { fullName: 'asc' }
   });
 
-  return <NewTicketForm users={users} />;
+  return <TicketForm users={users} />;
 }
