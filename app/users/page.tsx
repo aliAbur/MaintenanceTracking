@@ -16,10 +16,10 @@ export default async function UsersPage() {
             <h1 className="text-2xl font-bold text-on-surface">User Management</h1>
             <p className="text-sm text-on-surface-variant mt-1">Manage system operators and their access levels.</p>
           </div>
-          <button className="hidden sm:flex bg-primary text-on-primary font-semibold text-sm px-4 py-2 rounded-lg items-center gap-1 hover:bg-primary/90 transition-colors">
+          <Link href="/users/new" className="hidden sm:flex bg-primary text-on-primary font-semibold text-sm px-4 py-2 rounded-lg items-center gap-1 hover:bg-primary/90 transition-colors">
             <span className="material-symbols-outlined text-[18px]">person_add</span>
             Add User
-          </button>
+          </Link>
         </div>
 
         <div className="overflow-x-auto">

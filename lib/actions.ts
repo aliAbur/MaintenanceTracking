@@ -119,3 +119,21 @@ export async function updateTicketStatus(ticketId: string, newStatus: TicketStat
     });
   });
 }
+
+import { UserRole } from '@prisma/client';
+
+export async function createUser(formData: FormData) {
+  const fullName = formData.get('fullName') as string;
+  const email = formData.get('email') as string;
+  const role = formData.get('role') as UserRole;
+
+  const user = await prisma.userProfile.create({
+    data: {
+      fullName,
+      email,
+      role: role || 'Employee'
+    }
+  });
+
+  return user;
+}
