@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getSession } from './lib/auth';
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const isAuthRoute = request.nextUrl.pathname.startsWith('/login');
   
   // Try to get session
