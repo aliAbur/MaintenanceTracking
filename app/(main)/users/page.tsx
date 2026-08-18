@@ -1,9 +1,14 @@
 import { prisma } from '../../../lib/prisma';
 import Link from 'next/link';
+import DeleteUserButton from '../../../components/DeleteUserButton';
+import { getSession } from '../../../lib/auth';
 
 export const dynamic = 'force-dynamic';
 
 export default async function UsersPage() {
+  const session = await getSession();
+  const currentEmail = session?.user?.email || '';
+
   const users = await prisma.userProfile.findMany({
     orderBy: { createdAt: 'desc' }
   });
@@ -54,10 +59,11 @@ export default async function UsersPage() {
                   <td className="p-4 text-sm text-on-surface-variant font-mono">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="p-4 text-right">
+                  <td className="p-4 text-right flex items-center justify-end gap-1">
                     <Link href={`/users/${user.id}/edit`} className="text-secondary hover:text-primary transition-colors p-2 rounded-lg hover:bg-surface-variant inline-block">
                       <span className="material-symbols-outlined text-[20px]">edit</span>
                     </Link>
+                    <DeleteUserButton userId={user.id} userEmail={user.email} currentEmail={currentEmail} />
                   </td>
                 </tr>
               ))}

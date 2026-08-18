@@ -3,7 +3,7 @@
 import { prisma } from './prisma';
 import { TicketStatus, TicketPriority } from '@prisma/client';
 
-async function getOrCreateSystemUser() {
+export async function getOrCreateSystemUser() {
   let user = await prisma.userProfile.findUnique({ where: { email: 'system@panelservice.app' } });
   if (!user) {
     user = await prisma.userProfile.create({
@@ -156,6 +156,23 @@ export async function updateUser(userId: string, formData: FormData) {
       email,
       role
     }
+  });
+
+  return user;
+}
+
+export async function deleteUser(userId: string) {
+  const systemUserId = await getOrCreateSystemUser();
+
+  // Re-assign all audit logs made by this user to the system user to preserve history
+  await prisma.auditLog.updateMany({
+    where: { modifiedBy: userId },
+    data: { modifiedBy: systemUserId }
+  });
+
+  // Prisma takes care of setting Ticket assignedTo to null (ON DELETE SET NULL)
+  const user = await prisma.userProfile.delete({
+    where: { id: userId }
   });
 
   return user;
