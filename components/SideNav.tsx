@@ -57,6 +57,10 @@ export default function SideNav() {
           <span className="material-symbols-outlined text-[20px]">help</span>
           <span>Support</span>
         </a>
+        <a href="#" className="text-on-surface-variant hover:bg-error-container hover:text-on-error-container rounded-lg flex items-center gap-3 px-4 py-2.5 transition-all duration-200 mt-2">
+          <span className="material-symbols-outlined text-[20px]">logout</span>
+          <span>Logout</span>
+        </a>
       </div>
     </nav>
   );
