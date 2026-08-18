@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 export default function LoginPage() {
   return (
     <div className="min-h-screen bg-surface-container-low text-on-surface antialiased flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 p-8">
+      <div className="w-full max-w-[448px] bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 p-8">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-2">
