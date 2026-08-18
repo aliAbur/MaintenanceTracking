@@ -1,5 +1,5 @@
-import { getTickets } from '../lib/actions';
-import DashboardClient from '../components/DashboardClient';
+import { getTickets } from '../../lib/actions';
+import DashboardClient from '../../components/DashboardClient';
 
 export const dynamic = 'force-dynamic';
 

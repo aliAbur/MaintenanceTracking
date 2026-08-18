@@ -1,5 +1,5 @@
-import TicketForm from '../../../../components/TicketForm';
-import { prisma } from '../../../../lib/prisma';
+import TicketForm from '../../../../../components/TicketForm';
+import { prisma } from '../../../../../lib/prisma';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';

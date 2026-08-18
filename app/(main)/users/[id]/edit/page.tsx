@@ -1,5 +1,5 @@
-import UserForm from '../../../../components/UserForm';
-import { prisma } from '../../../../lib/prisma';
+import UserForm from '../../../../../components/UserForm';
+import { prisma } from '../../../../../lib/prisma';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';

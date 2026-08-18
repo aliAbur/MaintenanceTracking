@@ -1,5 +1,5 @@
-import { getTicketById, getAuditLogsForTicket } from '../../../lib/actions';
-import TicketDetailsClient from '../../../components/TicketDetailsClient';
+import { getTicketById, getAuditLogsForTicket } from '../../../../lib/actions';
+import TicketDetailsClient from '../../../../components/TicketDetailsClient';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
