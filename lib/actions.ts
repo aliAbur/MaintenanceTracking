@@ -138,6 +138,23 @@ export async function createUser(formData: FormData) {
   return user;
 }
 
+export async function updateUser(userId: string, formData: FormData) {
+  const fullName = formData.get('fullName') as string;
+  const email = formData.get('email') as string;
+  const role = formData.get('role') as UserRole;
+
+  const user = await prisma.userProfile.update({
+    where: { id: userId },
+    data: {
+      fullName,
+      email,
+      role
+    }
+  });
+
+  return user;
+}
+
 export async function updateTicketInfo(ticketId: string, formData: FormData) {
   const customerName = formData.get('customerName') as string;
   const customerPhone = formData.get('customerPhone') as string;

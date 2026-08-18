@@ -55,9 +55,9 @@ export default async function UsersPage() {
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="p-4 text-right">
-                    <button className="text-secondary hover:text-primary transition-colors p-2 rounded-lg hover:bg-surface-variant">
+                    <Link href={`/users/${user.id}/edit`} className="text-secondary hover:text-primary transition-colors p-2 rounded-lg hover:bg-surface-variant inline-block">
                       <span className="material-symbols-outlined text-[20px]">edit</span>
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               ))}
