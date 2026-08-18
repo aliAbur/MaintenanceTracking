@@ -28,6 +28,7 @@ enum UserRole {
 model UserProfile {
   id         String     @id @default(uuid())
   email      String     @unique
+  password   String?
   fullName   String?
   role       UserRole   @default(Employee)
   createdAt  DateTime   @default(now())

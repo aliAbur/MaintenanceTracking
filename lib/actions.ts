@@ -122,16 +122,22 @@ export async function updateTicketStatus(ticketId: string, newStatus: TicketStat
 
 import { UserRole } from '@prisma/client';
 
+import bcrypt from 'bcryptjs';
+
 export async function createUser(formData: FormData) {
   const fullName = formData.get('fullName') as string;
   const email = formData.get('email') as string;
   const role = formData.get('role') as UserRole;
+  const password = formData.get('password') as string;
+
+  const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
   const user = await prisma.userProfile.create({
     data: {
       fullName,
       email,
-      role: role || 'Employee'
+      role: role || 'Employee',
+      password: hashedPassword
     }
   });
 

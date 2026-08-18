@@ -1,8 +1,11 @@
-import Link from 'next/link';
+'use client';
 
-export const dynamic = 'force-dynamic';
+import { useActionState } from 'react';
+import { loginUser } from '../../../lib/auth-actions';
 
 export default function LoginPage() {
+  const [state, formAction, isPending] = useActionState(loginUser, null);
+
   return (
     <div className="min-h-screen bg-surface-container-low text-on-surface antialiased flex items-center justify-center p-4">
       <div className="w-full max-w-[448px] bg-surface-container-lowest rounded-lg shadow-sm border border-outline-variant/30 p-8">
@@ -18,7 +21,13 @@ export default function LoginPage() {
         </div>
 
         {/* Form */}
-        <form className="space-y-6">
+        <form className="space-y-6" action={formAction}>
+          {state?.error && (
+            <div className="p-3 bg-error-container text-sm font-semibold text-on-error-container rounded-lg">
+              {state.error}
+            </div>
+          )}
+
           {/* Email */}
           <div>
             <label className="block text-sm font-medium text-on-surface mb-2" htmlFor="email">Email address</label>
@@ -46,7 +55,7 @@ export default function LoginPage() {
               placeholder="Enter password" 
               required 
               type="password"
-              defaultValue="password123"
+              defaultValue="12341234"
             />
           </div>
 
@@ -62,12 +71,13 @@ export default function LoginPage() {
           </div>
 
           {/* Submit Button */}
-          <Link 
-            href="/"
-            className="w-full h-12 bg-primary text-on-primary rounded-lg font-medium text-base hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors flex justify-center items-center"
+          <button 
+            type="submit"
+            disabled={isPending}
+            className="w-full h-12 bg-primary text-on-primary rounded-lg font-medium text-base hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors flex justify-center items-center disabled:opacity-50"
           >
-            Sign In
-          </Link>
+            {isPending ? 'Signing In...' : 'Sign In'}
+          </button>
         </form>
 
         {/* Footer */}

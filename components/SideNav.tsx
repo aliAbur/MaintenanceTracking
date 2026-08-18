@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { logoutUser } from '../lib/auth-actions';
 
 export default function SideNav() {
   const pathname = usePathname();
@@ -49,10 +50,12 @@ export default function SideNav() {
       </div>
 
       <div className="flex flex-col gap-1 mt-auto pt-4 border-t border-outline-variant">
-        <Link href="/login" className="text-on-surface-variant hover:bg-error-container hover:text-on-error-container rounded-lg flex items-center gap-3 px-4 py-2.5 transition-all duration-200 mt-2">
-          <span className="material-symbols-outlined text-[20px]">logout</span>
-          <span>Logout</span>
-        </Link>
+        <form action={logoutUser}>
+          <button type="submit" className="w-full text-on-surface-variant hover:bg-error-container hover:text-on-error-container rounded-lg flex items-center gap-3 px-4 py-2.5 transition-all duration-200 mt-2">
+            <span className="material-symbols-outlined text-[20px]">logout</span>
+            <span>Logout</span>
+          </button>
+        </form>
       </div>
     </nav>
   );
