@@ -5,31 +5,32 @@ import { useRouter } from 'next/navigation';
 import { createUser, updateUser } from '../lib/actions';
 import Link from 'next/link';
 import { UserProfile } from '@prisma/client';
+import { toast } from 'react-hot-toast';
 
 export default function UserForm({ initialData }: { initialData?: UserProfile }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const isEditing = !!initialData;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
-    setError(null);
     
     const formData = new FormData(e.currentTarget);
     
     try {
       if (isEditing) {
         await updateUser(initialData.id, formData);
+        toast.success('User updated successfully');
       } else {
         await createUser(formData);
+        toast.success('User created successfully');
       }
       router.push('/users');
       router.refresh();
     } catch (err: any) {
-      setError(err.message || `Failed to ${isEditing ? 'update' : 'create'} user`);
+      toast.error(err.message || `Failed to ${isEditing ? 'update' : 'create'} user`);
     } finally {
       setIsSubmitting(false);
     }
@@ -54,13 +55,6 @@ export default function UserForm({ initialData }: { initialData?: UserProfile })
 
       <div className="bg-surface rounded-xl shadow-sm border border-outline-variant/30 p-6 md:p-8">
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-          {error && (
-            <div className="p-4 bg-error-container text-sm font-semibold text-on-error-container rounded-lg flex items-start gap-3">
-              <span className="material-symbols-outlined mt-0.5">error</span>
-              <div>{error}</div>
-            </div>
-          )}
-
           {/* Personal Info Section */}
           <div className="flex flex-col md:flex-row gap-6 md:gap-8 border-b border-outline-variant/50 pb-8">
             <div className="md:w-1/3">

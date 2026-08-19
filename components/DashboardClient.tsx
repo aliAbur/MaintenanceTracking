@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { Ticket } from '../types';
 import Link from 'next/link';
+import CustomSelect from './CustomSelect';
 
 interface DashboardClientProps {
   initialTickets: Ticket[];
@@ -13,12 +14,14 @@ export default function DashboardClient({ initialTickets }: DashboardClientProps
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('All');
   const [showClosed, setShowClosed] = useState(false);
+  const [sortOption, setSortOption] = useState<string>('createdAt_desc');
 
   // Filter and sort tickets
   const filteredTickets = useMemo(() => {
     return tickets
       .filter(t => {
         const matchesSearch = 
+          t.id.toLowerCase().includes(search.toLowerCase()) ||
           t.customerName.toLowerCase().includes(search.toLowerCase()) || 
           (t.customerPhone && t.customerPhone.includes(search));
         
@@ -27,8 +30,35 @@ export default function DashboardClient({ initialTickets }: DashboardClientProps
 
         return matchesSearch && matchesStatus && matchesClosed;
       })
-      .sort((a, b) => a.customerName.localeCompare(b.customerName));
-  }, [tickets, search, statusFilter, showClosed]);
+      .sort((a, b) => {
+        if (sortOption === 'createdAt_desc') {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        } else if (sortOption === 'createdAt_asc') {
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        } else if (sortOption === 'updatedAt_desc') {
+          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        } else if (sortOption === 'status') {
+          const statusOrder = { 'Open': 1, 'Processing': 2, 'OnHold': 3, 'Closed': 4 };
+          if (statusOrder[a.status] === statusOrder[b.status]) {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          }
+          return statusOrder[a.status] - statusOrder[b.status];
+        } else if (sortOption === 'assignment_asc') {
+          const aName = a.assignee?.fullName || 'ZZZZZ';
+          const bName = b.assignee?.fullName || 'ZZZZZ';
+          return aName.localeCompare(bName);
+        } else if (sortOption === 'assignment_desc') {
+          const aName = a.assignee?.fullName || '';
+          const bName = b.assignee?.fullName || '';
+          return bName.localeCompare(aName);
+        } else if (sortOption === 'client_asc') {
+          return a.customerName.localeCompare(b.customerName);
+        } else if (sortOption === 'client_desc') {
+          return b.customerName.localeCompare(a.customerName);
+        }
+        return 0;
+      });
+  }, [tickets, search, statusFilter, showClosed, sortOption]);
 
   const formatStatus = (status: string) => status === 'OnHold' ? 'On-Hold' : status;
 
@@ -41,7 +71,7 @@ export default function DashboardClient({ initialTickets }: DashboardClientProps
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
           <input
             type="text"
-            placeholder="Search Customer Name or Phone..."
+            placeholder="Search Ticket ID, Customer Name, or Phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full h-10 pl-10 pr-4 bg-surface-container-lowest border border-outline-variant rounded-lg text-sm focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all text-on-surface placeholder:text-outline"
@@ -49,22 +79,39 @@ export default function DashboardClient({ initialTickets }: DashboardClientProps
         </div>
         
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="h-10 pl-3 pr-8 bg-surface-container-lowest border border-outline-variant rounded-lg text-sm focus:border-primary-container focus:ring-2 focus:ring-primary-container/20 transition-all text-on-surface cursor-pointer"
-          >
-            <option value="All">All Statuses</option>
-            <option value="Open">Open</option>
-            <option value="Processing">Processing</option>
-            <option value="OnHold">On-Hold</option>
-            <option value="Closed">Closed</option>
-          </select>
+          <div className="w-40 h-10">
+            <CustomSelect
+              options={[
+                { value: 'All', label: 'All Statuses' },
+                { value: 'Open', label: 'Open' },
+                { value: 'Processing', label: 'Processing' },
+                { value: 'OnHold', label: 'On-Hold' },
+                { value: 'Closed', label: 'Closed' }
+              ]}
+              value={statusFilter}
+              onChange={setStatusFilter}
+              className="w-full h-full bg-surface-container-lowest border border-outline-variant rounded-lg text-sm focus-within:border-primary-container focus-within:ring-2 focus-within:ring-primary-container/20 px-3 text-on-surface"
+            />
+          </div>
           
-          <button className="h-10 px-3 bg-surface-container-lowest border border-outline-variant rounded-lg text-sm font-semibold text-secondary hover:bg-surface-container-low transition-colors flex items-center gap-1">
-            <span className="material-symbols-outlined text-[18px]">sort</span>
-            Sort
-          </button>
+          <div className="w-48 h-10">
+            <CustomSelect
+              icon="sort"
+              options={[
+                { value: 'createdAt_desc', label: 'Newest First' },
+                { value: 'createdAt_asc', label: 'Oldest First' },
+                { value: 'updatedAt_desc', label: 'Recently Updated' },
+                { value: 'status', label: 'Status' },
+                { value: 'client_asc', label: 'Client (A-Z)' },
+                { value: 'client_desc', label: 'Client (Z-A)' },
+                { value: 'assignment_asc', label: 'Operator (A-Z)' },
+                { value: 'assignment_desc', label: 'Operator (Z-A)' }
+              ]}
+              value={sortOption}
+              onChange={setSortOption}
+              className="w-full h-full bg-surface-container-lowest border border-outline-variant rounded-lg font-semibold text-sm focus-within:border-primary-container focus-within:ring-2 focus-within:ring-primary-container/20 px-3 text-on-surface"
+            />
+          </div>
           
           <label className="flex items-center gap-2 cursor-pointer ml-auto md:ml-2">
             <div className="relative flex items-center">
@@ -74,7 +121,7 @@ export default function DashboardClient({ initialTickets }: DashboardClientProps
                 onChange={(e) => setShowClosed(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-10 h-6 bg-surface-variant rounded-full peer peer-checked:bg-primary-container peer-focus:ring-2 peer-focus:ring-primary-container/20 transition-colors after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+              <div className="w-10 h-6 bg-surface-variant peer-checked:bg-primary-container rounded-full peer peer-focus:ring-2 peer-focus:ring-primary-container/20 transition-colors after:content-[''] after:absolute after:top-1 after:left-1 after:bg-outline peer-checked:after:bg-on-primary-container after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
             </div>
             <span className="text-sm font-medium text-on-surface-variant">Show Closed</span>
           </label>
@@ -103,7 +150,7 @@ export default function DashboardClient({ initialTickets }: DashboardClientProps
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                   
                   <div className="flex justify-between items-start z-10">
-                    <span className="font-mono text-sm text-secondary">#{ticket.id.substring(0, 8)}</span>
+                    <span className="font-mono text-sm text-secondary">#{ticket.id.startsWith('NITM') ? ticket.id : ticket.id.substring(0, 8)}</span>
                     <span className={`${priorityBg} text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide`}>
                       {ticket.priority} Priority
                     </span>
@@ -141,7 +188,7 @@ export default function DashboardClient({ initialTickets }: DashboardClientProps
             <span className="material-symbols-outlined text-4xl text-outline mb-4">search_off</span>
             <p className="text-base font-semibold text-on-surface-variant">0 Records Found</p>
             <button 
-              onClick={() => {setSearch(''); setStatusFilter('All'); setShowClosed(true);}}
+              onClick={() => {setSearch(''); setStatusFilter('All'); setShowClosed(true); setSortOption('createdAt_desc');}}
               className="mt-4 text-sm font-semibold text-primary hover:text-primary-container transition-colors"
             >
               Reset Parameters

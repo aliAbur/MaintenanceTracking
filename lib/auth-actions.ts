@@ -41,7 +41,7 @@ export async function loginUser(prevState: any, formData: FormData) {
     return { error: 'Invalid email or password.' };
   }
 
-  await setSession({ id: user.id, email: user.email, role: user.role });
+  await setSession({ id: user.id, email: user.email, role: user.role, fullName: user.fullName });
   
   redirect('/');
 }

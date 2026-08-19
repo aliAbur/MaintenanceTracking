@@ -8,37 +8,55 @@ import Link from 'next/link';
 import { UserProfile, Ticket } from '@prisma/client';
 import { updateTicketInfo } from '../lib/actions';
 
-export default function TicketForm({ users, initialData }: { users: UserProfile[], initialData?: Ticket }) {
+import CustomSelect from './CustomSelect';
+import toast from 'react-hot-toast';
+
+export default function TicketForm({ users, initialData, canEditDetails = true, canAssign = true }: { users: UserProfile[], initialData?: Ticket, canEditDetails?: boolean, canAssign?: boolean }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  
+  const [priority, setPriority] = useState(initialData?.priority || 'Low');
+  const [assignedTo, setAssignedTo] = useState(initialData?.assignedTo || '');
 
   const isEditing = !!initialData;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsSubmitting(true);
-    setError(null);
     
     const formData = new FormData(e.currentTarget);
     
     try {
       if (isEditing) {
         await updateTicketInfo(initialData.id, formData);
+        toast.success('Ticket updated successfully');
         router.push(`/ticket/${initialData.id}`);
       } else {
         await createTicket(formData);
+        toast.success('Ticket created successfully');
         router.push('/');
       }
       router.refresh();
     } catch (err: any) {
-      setError(err.message || `Failed to ${isEditing ? 'update' : 'create'} ticket`);
+      toast.error(err.message || `Failed to ${isEditing ? 'update' : 'create'} ticket`);
     } finally {
       setIsSubmitting(false);
     }
   }
 
   const inputClasses = "w-full h-12 px-4 bg-surface-container-highest border border-outline-variant rounded-t-md border-b-2 border-b-outline focus:border-b-primary focus:bg-surface-container-lowest focus:outline-none transition-colors text-on-surface placeholder:text-outline";
+  const selectClasses = "w-full h-12 px-4 bg-surface-container-highest border border-outline-variant rounded-t-md border-b-2 border-b-outline focus-within:border-b-primary focus-within:bg-surface-container-lowest focus-within:outline-none transition-colors text-on-surface";
+
+  const priorityOptions = [
+    { value: 'Low', label: 'Low' },
+    { value: 'Medium', label: 'Medium' },
+    { value: 'High', label: 'High' }
+  ];
+
+  const assignOptions = [
+    { value: '', label: '— Unassigned —' },
+    ...users.map(u => ({ value: u.id, label: `${u.fullName || u.email} (${u.role})` }))
+  ];
 
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in duration-500">
@@ -56,13 +74,6 @@ export default function TicketForm({ users, initialData }: { users: UserProfile[
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 space-y-8">
-          {error && (
-            <div className="p-4 bg-error-container text-sm font-semibold text-on-error-container rounded-lg flex items-start gap-3">
-              <span className="material-symbols-outlined mt-0.5">error</span>
-              <div>{error}</div>
-            </div>
-          )}
-
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
             <div className="relative">
               <label htmlFor="customerName" className="block text-xs font-semibold text-on-surface-variant mb-1">Client Organization *</label>
@@ -72,7 +83,8 @@ export default function TicketForm({ users, initialData }: { users: UserProfile[
                 id="customerName"
                 name="customerName"
                 defaultValue={initialData?.customerName}
-                className={inputClasses}
+                disabled={!canEditDetails}
+                className={`${inputClasses} ${!canEditDetails ? 'opacity-60 cursor-not-allowed' : ''}`}
                 placeholder="e.g. Acme Corp"
               />
             </div>
@@ -83,7 +95,8 @@ export default function TicketForm({ users, initialData }: { users: UserProfile[
                 id="customerPhone"
                 name="customerPhone"
                 defaultValue={initialData?.customerPhone || ''}
-                className={inputClasses}
+                disabled={!canEditDetails}
+                className={`${inputClasses} ${!canEditDetails ? 'opacity-60 cursor-not-allowed' : ''}`}
                 placeholder="+1 (000) 000-0000"
               />
             </div>
@@ -98,43 +111,34 @@ export default function TicketForm({ users, initialData }: { users: UserProfile[
                 id="panelType"
                 name="panelType"
                 defaultValue={initialData?.panelType}
-                className={inputClasses}
+                disabled={!canEditDetails}
+                className={`${inputClasses} ${!canEditDetails ? 'opacity-60 cursor-not-allowed' : ''}`}
                 placeholder="Device ID / Model Name"
               />
             </div>
             <div className="relative">
               <label htmlFor="priority" className="block text-xs font-semibold text-on-surface-variant mb-1">System Priority *</label>
-              <select
-                required
-                id="priority"
+              <CustomSelect
                 name="priority"
-                defaultValue={initialData?.priority || 'Low'}
-                className={`${inputClasses} cursor-pointer appearance-none`}
-              >
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
-              <span className="material-symbols-outlined absolute right-3 bottom-3 text-outline pointer-events-none">expand_more</span>
+                options={priorityOptions}
+                value={priority}
+                onChange={(val) => setPriority(val as any)}
+                disabled={!canEditDetails}
+                className={selectClasses}
+              />
             </div>
           </div>
 
           <div className="relative">
             <label htmlFor="assignedTo" className="block text-xs font-semibold text-on-surface-variant mb-1">Assign Operator (Optional)</label>
-            <select
-              id="assignedTo"
+            <CustomSelect
               name="assignedTo"
-              defaultValue={initialData?.assignedTo || ''}
-              className={`${inputClasses} cursor-pointer appearance-none`}
-            >
-              <option value="">— Unassigned —</option>
-              {users.map(user => (
-                <option key={user.id} value={user.id}>
-                  {user.fullName || user.email} ({user.role})
-                </option>
-              ))}
-            </select>
-            <span className="material-symbols-outlined absolute right-3 bottom-3 text-outline pointer-events-none">expand_more</span>
+              options={assignOptions}
+              value={assignedTo}
+              onChange={setAssignedTo}
+              disabled={!canEditDetails || !canAssign}
+              className={selectClasses}
+            />
           </div>
 
           <div className="relative">
@@ -147,6 +151,19 @@ export default function TicketForm({ users, initialData }: { users: UserProfile[
               className={`${inputClasses} h-auto py-3 resize-y`}
               placeholder="Describe symptoms, error codes, and deployment environment."
             ></textarea>
+          </div>
+
+          <div className="relative">
+            <label htmlFor="images" className="block text-xs font-semibold text-on-surface-variant mb-1">Attachments (Images)</label>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              multiple
+              accept="image/*"
+              disabled={!canEditDetails}
+              className={`w-full px-4 py-3 bg-surface-container-highest border border-outline-variant rounded-md text-sm text-on-surface focus:outline-none focus:border-primary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-container file:text-on-primary-container hover:file:bg-primary/20 ${!canEditDetails ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
+            />
           </div>
 
           <div className="pt-6 border-t border-outline-variant flex justify-end gap-3">

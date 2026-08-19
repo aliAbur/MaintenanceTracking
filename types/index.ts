@@ -21,6 +21,7 @@ export interface Ticket {
   status: TicketStatus;
   createdAt: string | Date;
   updatedAt: string | Date;
+  images: string[];
   assignee?: UserProfile | null;
 }
 

@@ -9,6 +9,10 @@ export default async function UsersPage() {
   const session = await getSession();
   const currentEmail = session?.user?.email || '';
 
+  if (session?.user?.role !== 'Admin') {
+    import('next/navigation').then(m => m.redirect('/?error=unauthorized'));
+  }
+
   const users = await prisma.userProfile.findMany({
     orderBy: { createdAt: 'desc' }
   });

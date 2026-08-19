@@ -33,8 +33,9 @@ model UserProfile {
   role       UserRole   @default(Employee)
   createdAt  DateTime   @default(now())
   
-  tickets    Ticket[]   @relation("TicketAssignee")
-  auditLogs  AuditLog[] @relation("AuditLogModifier")
+  tickets        Ticket[]   @relation("TicketAssignee")
+  createdTickets Ticket[]   @relation("TicketCreator")
+  auditLogs      AuditLog[] @relation("AuditLogModifier")
 }
 
 model Ticket {
@@ -45,11 +46,14 @@ model Ticket {
   priority      TicketPriority @default(Low)
   specialNotes  String?
   assignedTo    String?
+  createdBy     String?
   status        TicketStatus   @default(Open)
+  images        String[]       @default([])
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
   assignee      UserProfile?   @relation("TicketAssignee", fields: [assignedTo], references: [id])
+  creator       UserProfile?   @relation("TicketCreator", fields: [createdBy], references: [id])
   auditLogs     AuditLog[]
 }
 

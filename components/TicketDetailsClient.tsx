@@ -1,35 +1,67 @@
 'use client';
 
 import { Ticket, AuditLog, TicketStatus } from '../types';
-import { updateTicketStatus } from '../lib/actions';
+import { updateTicketStatus, deleteTicketAction } from '../lib/actions';
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import CustomSelect from './CustomSelect';
+import CustomConfirm from './CustomConfirm';
+import toast from 'react-hot-toast';
 
 interface TicketDetailsClientProps {
-  ticket: Ticket;
+  ticket: Ticket & { createdBy?: string | null };
   auditLogs: AuditLog[];
+  user?: any;
 }
 
-export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetailsClientProps) {
+export default function TicketDetailsClient({ ticket, auditLogs, user }: TicketDetailsClientProps) {
   const router = useRouter();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isPendingDelete, startDeleteTransition] = useTransition();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const handleStatusChange = async (newStatus: TicketStatus) => {
-    if (newStatus === ticket.status) return;
+  const role = user?.role || 'Admin';
+  const userId = user?.id;
+  const canEdit = role === 'Admin' || role === 'Employee';
+  const canDelete = role === 'Admin';
+
+  const handleStatusChange = async (newStatus: string) => {
+    if (newStatus === ticket.status || !canEdit) return;
     
     setIsUpdating(true);
     try {
-      await updateTicketStatus(ticket.id, newStatus, ticket.status);
+      await updateTicketStatus(ticket.id, newStatus as TicketStatus, ticket.status);
+      toast.success('Status updated successfully');
       router.refresh(); 
     } catch (error) {
       console.error("Update failed:", error);
-      alert("Failed to update status. Please try again.");
+      toast.error("Failed to update status. Please try again.");
     } finally {
       setIsUpdating(false);
     }
   };
+
+  const executeDelete = () => {
+    setShowDeleteConfirm(false);
+    startDeleteTransition(async () => {
+      try {
+        await deleteTicketAction(ticket.id);
+        toast.success('Ticket deleted');
+        router.push('/');
+      } catch (error) {
+        toast.error('Failed to delete ticket.');
+      }
+    });
+  };
+
+  const statusOptions = [
+    { value: 'Open', label: 'Open' },
+    { value: 'Processing', label: 'Processing' },
+    { value: 'OnHold', label: 'On-Hold' },
+    { value: 'Closed', label: 'Closed' }
+  ];
 
   const statusColors = {
     'Open': 'bg-primary-container text-on-primary-container',
@@ -47,16 +79,41 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
   const formatStatus = (status: string) => status === 'OnHold' ? 'On-Hold' : status;
 
   return (
-    <div className="max-w-6xl mx-auto animate-in fade-in duration-500">
+    <>
+      <CustomConfirm
+        isOpen={showDeleteConfirm}
+        title="Delete Ticket"
+        message="Are you sure you want to permanently delete this ticket? This action cannot be undone."
+        confirmText="Delete"
+        isDestructive={true}
+        onConfirm={executeDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
+      <div className="max-w-6xl mx-auto animate-in fade-in duration-500">
+
       <div className="mb-6 flex items-center justify-between">
         <Link href="/" className="inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors bg-surface hover:bg-surface-container-highest px-3 py-1.5 rounded-full">
           <span className="material-symbols-outlined text-[18px]">arrow_back</span>
           Back to Registry
         </Link>
-        <Link href={`/ticket/${ticket.id}/edit`} className="inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors bg-surface hover:bg-surface-container-highest px-3 py-1.5 rounded-full border border-outline-variant/30">
-          <span className="material-symbols-outlined text-[18px]">edit</span>
-          Edit Ticket
-        </Link>
+        <div className="flex gap-2 items-center">
+          {canDelete && (
+            <button 
+              onClick={() => setShowDeleteConfirm(true)}
+              disabled={isPendingDelete}
+              className="inline-flex items-center gap-1 text-sm font-semibold text-error hover:text-on-error hover:bg-error transition-colors bg-surface hover:bg-error-container px-3 py-1.5 rounded-full border border-error/30 disabled:opacity-50"
+            >
+              <span className="material-symbols-outlined text-[18px]">delete</span>
+              {isPendingDelete ? 'Deleting...' : 'Delete Ticket'}
+            </button>
+          )}
+          {canEdit && (
+            <Link href={`/ticket/${ticket.id}/edit`} className="inline-flex items-center gap-1 text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors bg-surface hover:bg-surface-container-highest px-3 py-1.5 rounded-full border border-outline-variant/30">
+              <span className="material-symbols-outlined text-[18px]">edit</span>
+              Edit Ticket
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -78,23 +135,16 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
                 </div>
               </div>
               
-              <div className="flex flex-col items-end shrink-0 bg-surface-container-low p-4 rounded-xl border border-outline-variant/30">
+              <div className="flex flex-col items-end shrink-0 bg-surface-container-low p-4 rounded-xl border border-outline-variant/30 relative">
                 <label className="text-xs font-semibold text-on-surface-variant mb-2">System Status</label>
-                <div className="relative w-40">
-                  <select 
-                    disabled={isUpdating}
+                <div className="w-40 h-10">
+                  <CustomSelect
+                    options={statusOptions}
                     value={ticket.status}
-                    onChange={(e) => handleStatusChange(e.target.value as TicketStatus)}
-                    className={`appearance-none w-full border border-outline-variant/50 rounded-lg py-2 pl-4 pr-10 text-sm font-semibold focus:ring-2 focus:ring-primary-container/20 cursor-pointer transition-all ${statusColors[ticket.status]} ${isUpdating ? 'opacity-50' : ''}`}
-                  >
-                    <option value="Open" className="text-on-surface bg-surface">Open</option>
-                    <option value="Processing" className="text-on-surface bg-surface">Processing</option>
-                    <option value="OnHold" className="text-on-surface bg-surface">On-Hold</option>
-                    <option value="Closed" className="text-on-surface bg-surface">Closed</option>
-                  </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-current opacity-70">
-                    <span className="material-symbols-outlined text-[20px]">expand_more</span>
-                  </div>
+                    onChange={handleStatusChange}
+                    disabled={isUpdating || !canEdit}
+                    className={`w-full h-full border border-outline-variant/50 rounded-lg px-4 text-sm font-semibold focus-within:ring-2 focus-within:ring-primary-container/20 transition-all ${statusColors[ticket.status]}`}
+                  />
                 </div>
               </div>
             </header>
@@ -158,6 +208,23 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
                 </div>
               </div>
             )}
+
+            {/* Attachments */}
+            {ticket.images && ticket.images.length > 0 && (
+              <div className="border-t border-outline-variant/30 bg-surface-container-lowest p-6 sm:p-8">
+                <div className="flex items-center gap-2 mb-4 text-on-surface-variant">
+                  <span className="material-symbols-outlined text-[20px]">image</span>
+                  <h3 className="text-xs font-semibold uppercase tracking-wide">Attachments</h3>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {ticket.images.map((imgUrl, i) => (
+                    <a key={i} href={imgUrl} target="_blank" rel="noreferrer" className="block aspect-square rounded-lg overflow-hidden border border-outline-variant/30 hover:opacity-90 transition-opacity">
+                      <img src={imgUrl} alt={`Attachment ${i + 1}`} className="w-full h-full object-cover" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </article>
         </div>
 
@@ -186,7 +253,14 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
                       <p className="text-sm font-semibold text-on-surface mb-1">
                         {log.action}
                       </p>
-                      {log.oldValue && log.newValue && (
+                      
+                      {log.action === 'Diagnostic Notes Updated' && log.newValue && (
+                        <div className="bg-surface-container rounded-md p-2 mb-2 mt-1 border border-outline-variant/30">
+                          <p className="text-sm text-on-surface whitespace-pre-wrap leading-relaxed">{log.newValue}</p>
+                        </div>
+                      )}
+                      
+                      {log.action !== 'Diagnostic Notes Updated' && log.oldValue && log.newValue && (
                         <p className="text-sm text-on-surface-variant mb-2 flex items-center gap-2">
                           <span className="line-through opacity-70">{formatStatus(log.oldValue)}</span> 
                           <span className="material-symbols-outlined text-[16px] text-outline">arrow_forward</span>
@@ -231,8 +305,8 @@ export default function TicketDetailsClient({ ticket, auditLogs }: TicketDetails
             </div>
           </div>
         </aside>
-
       </div>
     </div>
+    </>
   );
 }
