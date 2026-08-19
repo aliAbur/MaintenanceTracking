@@ -85,7 +85,7 @@ export default function TicketForm({ users, initialData, canEditDetails = true, 
                 defaultValue={initialData?.customerName}
                 disabled={!canEditDetails}
                 className={`${inputClasses} ${!canEditDetails ? 'opacity-60 cursor-not-allowed' : ''}`}
-                placeholder="e.g. Acme Corp"
+                placeholder="مصرف العراق"
               />
             </div>
             <div className="relative">
@@ -97,7 +97,7 @@ export default function TicketForm({ users, initialData, canEditDetails = true, 
                 defaultValue={initialData?.customerPhone || ''}
                 disabled={!canEditDetails}
                 className={`${inputClasses} ${!canEditDetails ? 'opacity-60 cursor-not-allowed' : ''}`}
-                placeholder="+1 (000) 000-0000"
+                placeholder="+964 700 000 0000"
               />
             </div>
           </div>
