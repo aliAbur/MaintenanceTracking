@@ -4,8 +4,8 @@ import { Ticket, AuditLog, TicketStatus } from '../types';
 import { updateTicketStatus, deleteTicketAction } from '../lib/actions';
 import { format } from 'date-fns';
 import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useTransitionRouter } from 'next-view-transitions';
+import { Link } from 'next-view-transitions';
 import CustomSelect from './CustomSelect';
 import CustomConfirm from './CustomConfirm';
 import toast from 'react-hot-toast';
@@ -17,7 +17,7 @@ interface TicketDetailsClientProps {
 }
 
 export default function TicketDetailsClient({ ticket, auditLogs, user }: TicketDetailsClientProps) {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const [isUpdating, setIsUpdating] = useState(false);
   const [isPendingDelete, startDeleteTransition] = useTransition();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);

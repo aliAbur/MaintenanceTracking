@@ -43,11 +43,11 @@ export async function loginUser(prevState: any, formData: FormData) {
 
   await setSession({ id: user.id, email: user.email, role: user.role, fullName: user.fullName });
   
-  redirect('/');
+  return { success: true };
 }
 
 export async function logoutUser() {
   const { clearSession } = await import('./auth');
   await clearSession();
-  redirect('/login');
+  return { success: true };
 }

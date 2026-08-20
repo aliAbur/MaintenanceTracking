@@ -1,5 +1,5 @@
 import { prisma } from '../../../lib/prisma';
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 import DeleteUserButton from '../../../components/DeleteUserButton';
 import { getSession } from '../../../lib/auth';
 

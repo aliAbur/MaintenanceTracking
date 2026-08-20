@@ -1,11 +1,12 @@
 'use client';
 
-import Link from 'next/link';
+import { Link, useTransitionRouter } from 'next-view-transitions';
 import { usePathname } from 'next/navigation';
 import { logoutUser } from '../lib/auth-actions';
 
 export default function SideNav({ user }: { user?: any }) {
   const pathname = usePathname();
+  const router = useTransitionRouter();
 
   const getLinkClass = (path: string, exact = false) => {
     const isActive = exact ? pathname === path : pathname.startsWith(path);
@@ -64,12 +65,16 @@ export default function SideNav({ user }: { user?: any }) {
             </div>
           </div>
         )}
-        <form action={logoutUser}>
-          <button type="submit" className="w-full text-on-surface-variant hover:bg-error-container hover:text-on-error-container rounded-lg flex items-center gap-3 px-4 py-2.5 transition-all duration-200">
-            <span className="material-symbols-outlined text-[20px]">logout</span>
-            <span>Logout</span>
-          </button>
-        </form>
+        <button 
+          onClick={async () => {
+            await logoutUser();
+            router.push('/login');
+          }}
+          className="w-full text-left text-on-surface-variant hover:bg-error-container hover:text-on-error-container rounded-lg flex items-center gap-3 px-4 py-2.5 transition-all duration-200"
+        >
+          <span className="material-symbols-outlined text-[20px]">logout</span>
+          <span>Logout</span>
+        </button>
       </div>
     </nav>
   );

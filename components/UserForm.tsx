@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTransitionRouter } from 'next-view-transitions';
 import { createUser, updateUser } from '../lib/actions';
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 import { UserProfile } from '@prisma/client';
 import { toast } from 'react-hot-toast';
 
 export default function UserForm({ initialData }: { initialData?: UserProfile }) {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const isEditing = !!initialData;

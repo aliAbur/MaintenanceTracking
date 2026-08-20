@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTransitionRouter } from 'next-view-transitions';
 import { createTicket } from '../lib/actions';
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 
 import { UserProfile, Ticket } from '@prisma/client';
 import { updateTicketInfo } from '../lib/actions';
@@ -12,7 +12,7 @@ import CustomSelect from './CustomSelect';
 import toast from 'react-hot-toast';
 
 export default function TicketForm({ users, initialData, canEditDetails = true, canAssign = true }: { users: UserProfile[], initialData?: Ticket, canEditDetails?: boolean, canAssign?: boolean }) {
-  const router = useRouter();
+  const router = useTransitionRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [priority, setPriority] = useState(initialData?.priority || 'Low');

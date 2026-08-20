@@ -2,14 +2,14 @@
 
 import { useTransition, useState } from 'react';
 import { deleteUser } from '../lib/actions';
-import { useRouter } from 'next/navigation';
+import { useTransitionRouter } from 'next-view-transitions';
 import CustomConfirm from './CustomConfirm';
 import toast from 'react-hot-toast';
 
 export default function DeleteUserButton({ userId, userEmail, currentEmail }: { userId: string, userEmail: string, currentEmail: string }) {
   const [isPending, startTransition] = useTransition();
   const [showConfirm, setShowConfirm] = useState(false);
-  const router = useRouter();
+  const router = useTransitionRouter();
 
   if (userEmail === currentEmail || userEmail === 'system@panelservice.app') {
     return null; // Cannot delete yourself or the system user

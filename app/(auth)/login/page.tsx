@@ -1,10 +1,18 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { loginUser } from '../../../lib/auth-actions';
+import { useTransitionRouter } from 'next-view-transitions';
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(loginUser, null);
+  const router = useTransitionRouter();
+
+  useEffect(() => {
+    if (state?.success) {
+      router.push('/');
+    }
+  }, [state, router]);
 
   return (
     <div className="min-h-screen bg-surface-container-low text-on-surface antialiased flex items-center justify-center p-4">

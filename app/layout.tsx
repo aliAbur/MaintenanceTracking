@@ -11,20 +11,24 @@ export const metadata: Metadata = {
   description: 'Functional tracking for interactive panels.',
 };
 
+import { ViewTransitions } from 'next-view-transitions';
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="light">
-      <head>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-      </head>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} bg-background text-on-surface font-sans antialiased h-screen flex flex-col overflow-hidden`}>
-        {children}
-        <Toaster position="bottom-right" />
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en" data-theme="light">
+        <head>
+          <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+        </head>
+        <body className={`${inter.variable} ${jetbrainsMono.variable} bg-background text-on-surface font-sans antialiased h-screen flex flex-col overflow-hidden`}>
+          {children}
+          <Toaster position="bottom-right" />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }

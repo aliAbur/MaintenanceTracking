@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { Ticket } from '../types';
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 import CustomSelect from './CustomSelect';
 
 interface DashboardClientProps {
